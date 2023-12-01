@@ -1,6 +1,12 @@
 <?php
 session_start();
 include '../config/koneksi.php';
+// untuk admin
+if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+    // Jika tidak, redirect ke login.php
+    header('Location: ../login.php');
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
