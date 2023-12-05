@@ -65,8 +65,8 @@ include '../config/koneksi.php';
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Components:</h6>
-                        <a class="collapse-item" href="utilities-animation.html">Tambah Barang</a>
-                        <a class="collapse-item" href="cards.html">Barang Masuk</a>
+                        <a class="collapse-item" href="module/barang.php">Tambah Barang</a>
+                        <a class="collapse-item" href="module/barangMasuk.php">Barang Masuk</a>
                     </div>
                 </div>
             </li>
@@ -161,6 +161,7 @@ include '../config/koneksi.php';
 
             <!-- Main Content -->
             <div id="content">
+                
 
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">

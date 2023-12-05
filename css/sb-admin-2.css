@@ -4511,10 +4511,27 @@ input[type="button"].btn-block {
   box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1); /* Tambahkan sedikit shadow */
   transition: transform 0.3s ease; /* Animasi transisi untuk efek hover */
 }
+.card-1 {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #f8f9fc; /* Ganti warna background */
+  background-clip: border-box;
+  border: 1px solid #d1d3e2; /* Ganti warna border */
+  border-radius: 1rem; /* Kurangi radius border */
+  padding: 1.5rem; /* Tambahkan padding untuk memberi ruang di dalam kartu */
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1); /* Tambahkan sedikit shadow */
+  transition: transform 0.3s ease; /* Animasi transisi untuk efek hover */
+}
 
 .card:hover {
-  transform: scale(1.02); /* Efek scaling saat dihover */
+  transform: scale(1.02);
 }
+
+
+
 
 
 .card > hr {
