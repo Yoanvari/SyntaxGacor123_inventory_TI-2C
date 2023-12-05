@@ -1,7 +1,7 @@
 <?php
-session_start(); // Pastikan session_start() dipanggil sebelum menggunakan $_SESSION
+session_start();
 var_dump($_POST);
-// Tambah barang
+
 if (!empty($_SESSION['username'])) {
     require '../config/koneksi.php';
     require '../function/pesan_kilat.php';
@@ -12,24 +12,43 @@ if (!empty($_SESSION['username'])) {
         $deskripsi = antiinjection($koneksi, $_POST['deskripsi']);
         $stok = antiinjection($koneksi, $_POST['stok']);
         $foto = antiinjection($koneksi, $_POST['foto']);
+        $keterangan = antiinjection($koneksi, $_POST['keterangan']); // Sesuaikan dengan nama elemen form
 
-        // Tampilkan nilai variabel sebelum eksekusi query (untuk debugging)
-        var_dump($namaBarang, $deskripsi, $stok, $foto);
+        var_dump($namaBarang, $deskripsi, $stok, $foto, $keterangan);
 
-        // Query SQL
-        $addtotable = mysqli_query($koneksi, "INSERT INTO barang (namaBarang, deskripsi, stok, foto) VALUES ('$namaBarang', '$deskripsi', '$stok', '$foto')");
+        // Query SQL untuk barang
+        $addtotable_barang = mysqli_query($koneksi, "INSERT INTO barang (namaBarang, deskripsi, stok, foto, keterangan) VALUES ('$namaBarang', '$deskripsi', '$stok', '$foto', '$keterangan')");
     
-        if ($addtotable) {
+        if ($addtotable_barang) {
             pesan('success', "Data Barang Baru Ditambahkan.");
         } else {
             pesan('danger', "Menambahkan Data Barang Gagal: " . mysqli_error($koneksi));
-            echo "Query error: " . mysqli_error($koneksi); // Tampilkan pesan error
-            die(mysqli_error($koneksi)); // Hentikan eksekusi skrip jika ada kesalahan
+            echo "Query error: " . mysqli_error($koneksi);
+            die(mysqli_error($koneksi));
         }
 
         header("Location: ../admin/module/barang.php");
-        exit(); // Pastikan exit() dipanggil setelah header redirect
+        exit();
+    }
+
+    if (isset($_POST['addnewanggaran'])) {
+        $keterangan = antiinjection($koneksi, $_POST['keterangan']);
+
+        var_dump($keterangan);
+
+        // Query SQL untuk anggaran
+        $addtotable_anggaran = mysqli_query($koneksi, "INSERT INTO anggaran (keterangan) VALUES ('$keterangan')");
+    
+        if ($addtotable_anggaran) {
+            pesan('success', "Data Anggaran Baru Ditambahkan.");
+        } else {
+            pesan('danger', "Menambahkan Data Anggaran Gagal: " . mysqli_error($koneksi));
+            echo "Query error: " . mysqli_error($koneksi);
+            die(mysqli_error($koneksi));
+        }
+
+        header("Location: ../admin/module/barang.php");
+        exit();
     }
 }
 ?>
-

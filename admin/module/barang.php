@@ -65,8 +65,8 @@ include '../../config/koneksi.php';
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Components:</h6>
+                        <a class="collapse-item" href="anggaran.php">Anggaran</a>
                         <a class="collapse-item" href="barang.php">Tambah Barang</a>
-                        <a class="collapse-item" href="barangMasuk.php">Barang Masuk</a>
                     </div>
                 </div>
             </li>
@@ -223,6 +223,17 @@ include '../../config/koneksi.php';
                                                 <input type="number" name="stok" id="stok" class="form-control" required>
                                             </div>
                                             <div class="mb-3">
+                                                <label for="keterangan" class="form-label">Keterangan Barang</label>
+                                                <select name="keterangan" id="keterangan" class="form-control">
+                                                    <?php
+                                                    $result_anggaran = mysqli_query($koneksi, "SELECT * FROM anggaran");
+                                                    while ($row_anggaran = mysqli_fetch_assoc($result_anggaran)) {
+                                                        echo "<option value='" . $row_anggaran['keterangan'] . "'>" . $row_anggaran['keterangan'] . "</option>";
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                            <div class="mb-3">
                                                 <label for="foto" class="form-label">Foto Barang</label>
                                                 <input type="file" name="foto" id="foto" class="form-control" required>
                                             </div>
@@ -241,6 +252,7 @@ include '../../config/koneksi.php';
                                             <th>Nama Barang</th>
                                             <th>Deskripsi</th>
                                             <th>Stok</th>
+                                            <th>keterangan</th>
                                             <th>Foto</th>
                                         </tr>
                                     </thead>
@@ -257,6 +269,7 @@ include '../../config/koneksi.php';
                                                 echo "<td>" . $row['namaBarang'] . "</td>";
                                                 echo "<td>" . $row['deskripsi'] . "</td>";
                                                 echo "<td>" . $row['stok'] . "</td>";
+                                                echo "<td>" . $row['keterangan'] . "</td>";
                                                 echo "<td>" . $row['foto'] . "</td>";
                                                 echo "</tr>";
                                             }
@@ -267,7 +280,7 @@ include '../../config/koneksi.php';
                                         echo "Error: " . mysqli_error($koneksi);
                                     }
                                     ?>
-
+                                    
                                     </tbody>
                                 </table>
                             </div>
