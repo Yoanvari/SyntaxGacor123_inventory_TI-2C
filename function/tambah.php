@@ -11,12 +11,13 @@ if (!empty($_SESSION['username'])) {
         $namaBarang = antiinjection($koneksi, $_POST['namaBarang']);
         $deskripsi = antiinjection($koneksi, $_POST['deskripsi']);
         $stok = antiinjection($koneksi, $_POST['stok']);
+        $foto = antiinjection($koneksi, $_POST['foto']);
 
         // Tampilkan nilai variabel sebelum eksekusi query (untuk debugging)
-        var_dump($namaBarang, $deskripsi, $stok);
+        var_dump($namaBarang, $deskripsi, $stok, $foto);
 
         // Query SQL
-        $addtotable = mysqli_query($koneksi, "INSERT INTO barang (namaBarang, deskripsi, stok) VALUES ('$namaBarang', '$deskripsi', '$stok')");
+        $addtotable = mysqli_query($koneksi, "INSERT INTO barang (namaBarang, deskripsi, stok, foto) VALUES ('$namaBarang', '$deskripsi', '$stok', '$foto')");
     
         if ($addtotable) {
             pesan('success', "Data Barang Baru Ditambahkan.");

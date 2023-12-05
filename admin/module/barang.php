@@ -1,6 +1,5 @@
 <?php
-session_start();
-include './config/koneksi.php';
+include '../../config/koneksi.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -21,7 +20,7 @@ include './config/koneksi.php';
     <!-- Custom styles for this template-->
     <link href="/css/sb-admin-2.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
-    <link href=/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <link href="/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
 </head>
 
@@ -58,7 +57,7 @@ include './config/koneksi.php';
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                <a class="nav-link collapsed" href="/admin/datamaster.php" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Data Master</span>
@@ -213,25 +212,23 @@ include './config/koneksi.php';
                                         <form action="/function/tambah.php" method="post">
                                             <div class="mb-3">
                                                 <label for="namaBarang" class="form-label">Nama Barang</label>
-                                                <input type="text" name="namaBarang" id="namabarang" placeholder="Nama Barang" class="form-control" required>
+                                                <input type="text" name="namaBarang" id="namabarang" class="form-control" required>
                                             </div>
                                             <div class="mb-3">
                                                 <label for="deskripsi" class="form-label">Deskripsi Barang</label>
-                                                <input type="text" name="deskripsi" id="deskripsi" placeholder="Deskripsi Barang" class="form-control" required >
+                                                <input type="text" name="deskripsi" id="deskripsi" class="form-control" required >
                                             </div>
                                             <div class="mb-3">
                                                 <label for="stok" class="form-label">Stok Barang</label>
-                                                <input type="number" name="stok" id="stok" placeholder="Stok Barang" class="form-control" required>
+                                                <input type="number" name="stok" id="stok" class="form-control" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="foto" class="form-label">Foto Barang</label>
+                                                <input type="file" name="foto" id="foto" class="form-control" required>
                                             </div>
                                             <button type="submit" class="btn btn-primary" name="addnewbarang">Submit</button>
                                         </form>
                                     </div>
-
-                                    <!-- Modal Footer -->
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                                    </div>
-
                                 </div>
                             </div>
                         </div>
@@ -244,29 +241,33 @@ include './config/koneksi.php';
                                             <th>Nama Barang</th>
                                             <th>Deskripsi</th>
                                             <th>Stok</th>
+                                            <th>Foto</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php
-                                            $i = 1; 
-                                            $ambilsemuadatabarang = mysqli_query($koneksi, "SELECT * FROM barang");
-                                            if ($ambilsemuadatabarang === false) {
-                                                die("Query error: " . mysqli_error($koneksi));
+                                    <?php
+                                    $result = mysqli_query($koneksi, "SELECT * FROM barang");
+
+                                    if ($result) {
+                                        if (mysqli_num_rows($result) > 0) {
+                                            $no = 1;
+                                            while ($row = mysqli_fetch_assoc($result)) {
+                                                echo "<tr>";
+                                                echo "<td>" . $no++ . "</td>";
+                                                echo "<td>" . $row['namaBarang'] . "</td>";
+                                                echo "<td>" . $row['deskripsi'] . "</td>";
+                                                echo "<td>" . $row['stok'] . "</td>";
+                                                echo "<td>" . $row['foto'] . "</td>";
+                                                echo "</tr>";
                                             }
-                                            while ($data = mysqli_fetch_array($ambilsemuadatabarang)) {
-                                                $namaBarang = $data['namaBarang'];
-                                                $deskripsi = $data['deskripsi'];
-                                                $stok = $data['stok'];
-                                            ?>
-                                            <tr>
-                                                <td><?= $i++; ?></td>
-                                                <td><?= $namaBarang; ?></td>
-                                                <td><?= $deskripsi; ?></td>
-                                                <td><?= $stok; ?></td>
-                                            </tr>
-                                        <?php
+                                        } else {
+                                            echo "<tr><td colspan='4'>Tidak ada data</td></tr>";
                                         }
-                                        ?>
+                                    } else {
+                                        echo "Error: " . mysqli_error($koneksi);
+                                    }
+                                    ?>
+
                                     </tbody>
                                 </table>
                             </div>
