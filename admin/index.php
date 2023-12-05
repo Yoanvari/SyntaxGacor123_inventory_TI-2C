@@ -1,6 +1,12 @@
 <?php
 session_start();
 include '../config/koneksi.php';
+// untuk admin
+if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+    // Jika tidak, redirect ke login.php
+    header('Location: ../login.php');
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -65,8 +71,14 @@ include '../config/koneksi.php';
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Components:</h6>
+<<<<<<< HEAD
                         <a class="collapse-item" href="module/barang.php">Tambah Barang</a>
                         <a class="collapse-item" href="module/barangMasuk.php">Barang Masuk</a>
+=======
+                        <a class="collapse-item" href="utilities-animation.html">Tambah Barang</a>
+                        <a class="collapse-item" href="cards.html">Barang Masuk</a>
+                        <a class="collapse-item" href="cards.html">Barang Keluar</a>
+>>>>>>> 79ecc34cc1b602c46cedfd76baaaa03c52989539
                     </div>
                 </div>
             </li>
@@ -126,18 +138,11 @@ include '../config/koneksi.php';
                     <span>Peminjaman</span></a>
             </li>
 
-
-            <li class="nav-item">
-                <a class="nav-link" href="charts.html">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>History Peminjaman</span></a>
-            </li>
-
             <!-- Nav Item - Tables -->
             <li class="nav-item">
                 <a class="nav-link" href="tables.html">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>List User</span></a>
+                    <span>Data Admin</span></a>
             </li>
 
 
@@ -171,11 +176,8 @@ include '../config/koneksi.php';
                         <i class="fa fa-bars"></i>
                     </button>
 
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-                    </div>
                     <!-- Topbar Search -->
-                    <!-- <form
+                    <form
                         class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                         <div class="input-group">
                             <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
@@ -186,7 +188,7 @@ include '../config/koneksi.php';
                                 </button>
                             </div>
                         </div>
-                    </form> -->
+                    </form>
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -226,7 +228,7 @@ include '../config/koneksi.php';
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="profil.php?id=<?=$_SESSION['id']?>">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
@@ -239,7 +241,7 @@ include '../config/koneksi.php';
                                     Activity Log
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="/login.php" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" href="../logout.php" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>
@@ -255,9 +257,9 @@ include '../config/koneksi.php';
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <!-- <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-                    </div> -->
+                    </div>
 
                     <!-- Content Row -->
                     <div class="row">
@@ -287,7 +289,7 @@ include '../config/koneksi.php';
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Data Barang Masuk</div>
+                                                Barang Masuk</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">sama nanti ada isinya disini</div>
                                         </div>
                                         <div class="col-auto">
@@ -323,7 +325,7 @@ include '../config/koneksi.php';
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                Data User</div>
+                                                Data Operator</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">sama nanti juga ada isinya disini</div>
                                         </div>
                                         <div class="col-auto">
@@ -363,7 +365,7 @@ include '../config/koneksi.php';
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="../login.php">Logout</a>
+                    <a class="btn btn-primary" href="../logout.php">Logout</a>
                 </div>
             </div>
         </div>

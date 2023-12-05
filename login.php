@@ -3,7 +3,16 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 include "function/pesan_kilat.php";
-
+if(isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
+    // Jika sudah login, redirect ke index.php
+    header("location:admin/");
+    exit();
+}
+if(isset($_SESSION['logged_in_user']) && $_SESSION['logged_in_user'] === true) {
+    // Jika sudah login, redirect ke index.php
+    header("location:user/");
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
