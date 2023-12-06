@@ -95,7 +95,7 @@ include '../../config/koneksi.php';
 
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="tables.html">
+                <a class="nav-link" href="./list_user/list.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>List User</span></a>
             </li>
@@ -211,8 +211,8 @@ include '../../config/koneksi.php';
                                     <div class="modal-body">
                                         <form action="/function/tambah.php" method="post">
                                             <div class="mb-3">
-                                                <label for="keterangan" class="form-label">Keterangan Anggaran</label>
-                                                <input type="text" name="keterangan" id="keterangan" class="form-control" required>
+                                                <label for="asal" class="form-label">Asal Anggaran</label>
+                                                <input type="text" name="asal" id="asal" class="form-control" required>
                                             </div>
                                             <button type="submit" class="btn btn-primary" name="addnewanggaran">Submit</button>
                                         </form>
@@ -226,7 +226,7 @@ include '../../config/koneksi.php';
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Keterangan</th>
+                                            <th>Asal</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -239,7 +239,7 @@ include '../../config/koneksi.php';
                                             while ($row = mysqli_fetch_assoc($result)) {
                                                 echo "<tr>";
                                                 echo "<td>" . $no++ . "</td>";
-                                                echo "<td>" . $row['keterangan'] . "</td>";
+                                                echo "<td>" . $row['asal'] . "</td>";
                                                 echo "</tr>";
                                             }
                                         } else {

@@ -12,12 +12,12 @@ if (!empty($_SESSION['username'])) {
         $deskripsi = antiinjection($koneksi, $_POST['deskripsi']);
         $stok = antiinjection($koneksi, $_POST['stok']);
         $foto = antiinjection($koneksi, $_POST['foto']);
-        $keterangan = antiinjection($koneksi, $_POST['keterangan']); // Sesuaikan dengan nama elemen form
+        $asal = antiinjection($koneksi, $_POST['asal']); // Sesuaikan dengan nama elemen form
 
-        var_dump($namaBarang, $deskripsi, $stok, $foto, $keterangan);
+        var_dump($namaBarang, $deskripsi, $stok, $foto, $asal);
 
         // Query SQL untuk barang
-        $addtotable_barang = mysqli_query($koneksi, "INSERT INTO barang (namaBarang, deskripsi, stok, foto, keterangan) VALUES ('$namaBarang', '$deskripsi', '$stok', '$foto', '$keterangan')");
+        $addtotable_barang = mysqli_query($koneksi, "INSERT INTO barang (namaBarang, deskripsi, stok, foto, asal) VALUES ('$namaBarang', '$deskripsi', '$stok', '$foto', '$asal')");
     
         if ($addtotable_barang) {
             pesan('success', "Data Barang Baru Ditambahkan.");
@@ -32,12 +32,12 @@ if (!empty($_SESSION['username'])) {
     }
 
     if (isset($_POST['addnewanggaran'])) {
-        $keterangan = antiinjection($koneksi, $_POST['keterangan']);
+        $asal = antiinjection($koneksi, $_POST['asal']);
 
-        var_dump($keterangan);
+        var_dump($asal);
 
         // Query SQL untuk anggaran
-        $addtotable_anggaran = mysqli_query($koneksi, "INSERT INTO anggaran (keterangan) VALUES ('$keterangan')");
+        $addtotable_anggaran = mysqli_query($koneksi, "INSERT INTO anggaran (asal) VALUES ('$asal')");
     
         if ($addtotable_anggaran) {
             pesan('success', "Data Anggaran Baru Ditambahkan.");
