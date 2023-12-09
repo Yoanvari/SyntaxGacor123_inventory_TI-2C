@@ -314,6 +314,7 @@ include '../../config/koneksi.php';
                                 <!-- Modal Body -->
                                 <div class="modal-body">
                                     <form action="/function/update.php" method="post">
+                                        //ini gatau kenapa masih ngebug
                                         <input type="hidden" name="idBarang" id="editIdBarang" value="idBarang">
                                         <div class="mb-3">
                                             <label for="editNama" class="form-label">Nama Barang</label>
