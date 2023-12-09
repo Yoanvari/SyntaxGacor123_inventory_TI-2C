@@ -304,7 +304,7 @@ include '../../config/koneksi.php';
                      
                     <!-- Modal Edit -->
                     <div class="modal fade" id="editModal">
-                        <div class="modal-dialog">
+                    <div class="modal-dialog">
                             <div class="modal-content">
                                 <!-- Modal Header -->
                                 <div class="modal-header">
@@ -314,7 +314,6 @@ include '../../config/koneksi.php';
                                 <!-- Modal Body -->
                                 <div class="modal-body">
                                     <form action="/function/update.php" method="post">
-                                        <!-- Input tersembunyi untuk idBarang -->
                                         <input type="hidden" name="idBarang" id="editIdBarang" value="idBarang">
                                         <div class="mb-3">
                                             <label for="editNama" class="form-label">Nama Barang</label>
