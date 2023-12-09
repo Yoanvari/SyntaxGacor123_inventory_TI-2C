@@ -1,3 +1,10 @@
+<?php
+include '../../../config/koneksi.php';
+include '../../../OOP/user.php';
+
+$user = new User($koneksi);
+$allUsers = $user->getAllUsers();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,8 +23,8 @@
         rel="stylesheet">
     <!-- Custom styles for this template-->
     <link href="/css/sb-admin-2.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <link href=/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+    <link href="/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
 </head>
 
@@ -54,7 +61,7 @@
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                <a class="nav-link collapsed" href="/admin/datamaster.php" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Data Master</span>
@@ -62,8 +69,8 @@
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Components:</h6>
-                        <a class="collapse-item" href="barang.php">Tambah Barang</a>
-                        <a class="collapse-item" href="barangMasuk.php">Barang Masuk</a>
+                        <a class="collapse-item" href="../anggaran.php">Anggaran</a>
+                        <a class="collapse-item" href="../barang.php">Barang</a>
                     </div>
                 </div>
             </li>
@@ -122,7 +129,7 @@
                     </button>
 
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Data Barang Masuk</h1>
+                        <h1 class="h3 mb-0 text-gray-800">LIst User Inventory JTI</h1>
                     </div>
 
                     <!-- Topbar Navbar -->
@@ -154,7 +161,7 @@
 
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                            <a class="nav-link dropdown-toggle" href="/admin/datamaster.php" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">Admin Inventory</span>
                                 <img class="img-profile rounded-circle"
@@ -191,7 +198,7 @@
                 <div class="card-1 shadow mb-4">
                         <div class="card-1-body">
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
-                                Tambah Barang
+                                Tambah User
                             </button>
                             <!-- The Modal -->
                             <div class="modal fade" id="myModal">
@@ -200,7 +207,7 @@
 
                                     <!-- Modal Header -->
                                     <div class="modal-header">
-                                        <h4 class="modal-title text-primary">Tambah Barang</h4>
+                                        <h4 class="modal-title text-primary">Tambah User</h4>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                     </div>
 
@@ -208,26 +215,36 @@
                                     <div class="modal-body">
                                         <form action="/function/tambah.php" method="post">
                                             <div class="mb-3">
-                                                 <label for="namaBarang" class="form-label">Nama Barang</label>
-                                                <input type="text" name="namaBarang" id="namabarang" placeholder="Nama Barang" class="form-control" required>
+                                                <label for="nama_lengkap" class="form-label">Nama Lengkap</label>
+                                                <input type="text" name="nama_lengkap" id="nama_lengkap" class="form-control" required>
                                             </div>
                                             <div class="mb-3">
-                                                <label for="deskripsi" class="form-label">Deskripsi Barang</label>
-                                                <input type="text" name="deskripsi" id="deskripsi" placeholder="Deskripsi Barang" class="form-control" required >
+                                                <label for="email" class="form-label">Email</label>
+                                                <input type="email" name="email" id="email" class="form-control" required>
                                             </div>
                                             <div class="mb-3">
-                                                <label for="stok" class="form-label">Stok Barang</label>
-                                                <input type="number" name="stok" id="stok" placeholder="Stok Barang" class="form-control" required>
+                                                <label for="username" class="form-label">Nama Lengkap</label>
+                                                <input type="text" name="username" id="username" class="form-control" required>
                                             </div>
-                                            <button type="submit" class="btn btn-primary" name="barangmasuk">Submit</button>
+                                            <div class="mb-3">
+                                                <label for="password" class="form-label">Nama Lengkap</label>
+                                                <input type="password" name="password" id="password" class="form-control" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="level" class="form-label">Nama Lengkap</label>
+                                                <input type="text" name="level" id="level" class="form-control" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="asal" class="form-label">Nama Lengkap</label>
+                                                <input type="text" name="asal" id="asal" class="form-control" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="asal" class="form-label">Nama Lengkap</label>
+                                                <input type="text" name="asal" id="asal" class="form-control" required>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary" name="addnewanggaran">Submit</button>
                                         </form>
                                     </div>
-
-                                    <!-- Modal Footer -->
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                                    </div>
-
                                 </div>
                             </div>
                         </div>
@@ -237,18 +254,40 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Nama Barang</th>
-                                            <th>Deskripsi</th>
-                                            <th>Stok</th>
+                                            <th>Nama Lengkap</th>
+                                            <th>Email</th>
+                                            <th>Username</th>
+                                            <th>Password</th>
+                                            <th>Level</th>
+                                            <th>Status</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>Tiger Nixon</td>
-                                            <td>System Architect</td>
-                                            <td>Edinburgh</td>
-                                            <td>61</td>
-                                        </tr>
+                                    <?php
+                                        $result = mysqli_query($koneksi, "SELECT * FROM user");
+
+                                        if ($result) {
+                                            if (mysqli_num_rows($result) > 0) {
+                                                $no = 1;
+                                                while ($row = mysqli_fetch_assoc($result)) {
+                                                    $statusColor = (strtolower($row['status']) == 'aktif') ? '#00FF00' : 'red';
+                                                    echo "<tr>";
+                                                    echo "<td>" . $no++ . "</td>";
+                                                    echo "<td>" . $row['nama_lengkap'] . "</td>";
+                                                    echo "<td>" . $row['email'] . "</td>";
+                                                    echo "<td>" . $row['username'] . "</td>";
+                                                    echo "<td>" . $row['password'] . "</td>";
+                                                    echo "<td>" . $row['level'] . "</td>";
+                                                    echo "<td style='color: $statusColor;'>" . $row['status'] . "</td>";
+                                                    echo "</tr>";
+                                                }
+                                            } else {
+                                                echo "<tr><td colspan='4'>Tidak ada data</td></tr>";
+                                            }
+                                        } else {
+                                            echo "Error: " . mysqli_error($koneksi);
+                                        }
+                                    ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -283,7 +322,7 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="/login.php">Logout</a>
+                    <a class="btn btn-primary" href="../../../logout.php">Logout</a>
                 </div>
             </div>
         </div>

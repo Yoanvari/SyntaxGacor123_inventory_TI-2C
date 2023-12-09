@@ -1,12 +1,6 @@
 <?php
 session_start();
 include '../config/koneksi.php';
-// untuk admin
-if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
-    // Jika tidak, redirect ke login.php
-    header('Location: ../login.php');
-    exit();
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -27,7 +21,12 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
         rel="stylesheet">
     <!-- Custom styles for this template-->
     <link href="../css/sb-admin-2.css" rel="stylesheet">
-
+    <style>
+        #add-row {
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+    </style>
 </head>
 
 <body id="page-top">
@@ -48,7 +47,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="index.php">
+                <a class="nav-link" href="?view=dashboard">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
@@ -63,7 +62,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="datamaster.php" data-toggle="collapse" data-target="#collapseTwo"
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Data Master</span>
@@ -71,9 +70,9 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Components:</h6>
-                        <a class="collapse-item" href="./module/anggaran.php">Anggaran</a>
-                        <a class="collapse-item" href="./module/barang.php">Tambah Barang</a>
-
+                        <a class="collapse-item" href="?view=tambahBarang">Tambah Barang</a>
+                        <a class="collapse-item" href="?view=barangMasuk">Barang Masuk</a>
+                        <a class="collapse-item" href="?view=barangKeluar">Barang Keluar</a>
                     </div>
                 </div>
             </li>
@@ -105,25 +104,39 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                 Addons
             </div>
 
+            <!-- Nav Item - Pages Collapse Menu -->
+            <!-- <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
+                    aria-expanded="true" aria-controls="collapsePages">
+                    <i class="fas fa-fw fa-folder"></i>
+                    <span>Pages</span>
+                </a>
+                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Login Screens:</h6>
+                        <a class="collapse-item" href="login.html">Login</a>
+                        <a class="collapse-item" href="register.html">Register</a>
+                        <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
+                        <div class="collapse-divider"></div>
+                        <h6 class="collapse-header">Other Pages:</h6>
+                        <a class="collapse-item" href="404.html">404 Page</a>
+                        <a class="collapse-item" href="blank.html">Blank Page</a>
+                    </div>
+                </div>
+            </li> -->
+
             <!-- Nav Item - Charts -->
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
+                <a class="nav-link" href="?view=peminjaman">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Peminjaman</span></a>
             </li>
 
-
-            <li class="nav-item">
-                <a class="nav-link" href="charts.html">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>History Peminjaman</span></a>
-            </li>
-
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="./module/list_user/list.php">
+                <a class="nav-link" href="?view=dataAdmin">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>List User</span></a>
+                    <span>Data Admin</span></a>
             </li>
 
 
@@ -147,7 +160,6 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 
             <!-- Main Content -->
             <div id="content">
-                
 
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
@@ -209,7 +221,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="profil.php?id=<?=$_SESSION['id']?>">
+                                <a class="dropdown-item" href="#">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
@@ -222,7 +234,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                                     Activity Log
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="../logout.php" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" href="/login.php" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>
@@ -236,83 +248,51 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-
-                    <!-- Page Heading -->
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-                    </div>
-
-                    <!-- Content Row -->
-                    <div class="row">
-
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-primary shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                Data Barang</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">nanti ada isinya disini</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
+                    <div class="row py-0">
+                        <div class="col-md-12">
+                            <div class="card shadow-sm">
+                                <div class="card-header">
+                                    <div class="d-flex align-items-center">
+                						<h5 class="card-title">Data Pinjam Ruangan</h5>
+                					</div>
                                 </div>
-                            </div>
-                        </div>
-
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
                                 <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Barang Masuk</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">sama nanti ada isinya disini</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Data Peminjaman</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">nanti ada isinya disini</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Pending Requests Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-warning shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                Data Operator</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">sama nanti juga ada isinya disini</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-comments fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
+                                    <table id="add-row" class="table table-striped table-hover my-0">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">No</th>
+                                                <th scope="col">Nama Barang</th>
+                                                <th scope="col">Tgl Mulai</th>
+                                                <th scope="col">Tgl Selesai</th>
+                                                <th scope="col">Jumlah Pinjam</th>
+                                                <th scope="col">Lokasi Barang</th>
+                                                <th scope="col">Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        <?php
+                						    $no = 1;
+                						    $query = mysqli_query($koneksi,'SELECT pinjambarang.id, pinjambarang.id_barang, pinjambarang.id_user, pinjambarang.tgl_mulai, pinjambarang.tgl_selesai, pinjambarang.qty, pinjambarang.lokasi_barang, pinjambarang.status, barang.nama_barang from pinjambarang inner join barang on barang.id=pinjambarang.id_barang inner join user on user.id=pinjambarang.id_user');
+                						    while ($pinjambarang = mysqli_fetch_array($query)) {
+                						?>
+                						<tr>
+                							<td><?php echo $no++ ?></td>
+                							<td><?php echo $pinjambarang['nama_barang'] ?></td>
+                							<td><?php echo $pinjambarang['tgl_mulai'] ?></td>
+                							<td><?php echo $pinjambarang['tgl_selesai'] ?></td>
+                							<td><?php echo $pinjambarang['qty'] ?></td>
+                                            <td><?php echo $pinjambarang['lokasi_barang'] ?></td>
+                							<td>
+                								<?php if($pinjambarang['status'] == 'menunggu') { ?>
+                								<div class="badge badge-danger"><?php echo $pinjambarang['status'] ?></div>
+                								<?php }else { ?>
+                									<div class="badge rounded-pill badge-success"><?php echo $pinjambarang['status'] ?></div>
+                								<?php } ?>
+                							</td>
+                						</tr>
+                						<?php } ?>
+                                        </tbody>
+                                      </table>
                                 </div>
                             </div>
                         </div>
@@ -346,13 +326,14 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="../logout.php">Logout</a>
+                    <a class="btn btn-primary" href="../login.php">Logout</a>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Bootstrap core JavaScript-->
+    <script src="../vendor/jquery/jquery.3.2.1.min.js"></script>
     <script src="../vendor/jquery/jquery.min.js"></script>
     <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- Core plugin JavaScript-->
@@ -361,10 +342,17 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     <script src="../js/sb-admin-2.min.js"></script>
     <!-- Page level plugins -->
     <script src="../vendor/chart.js/Chart.min.js"></script>
+    <!--Datatables-->
+    <script src="../vendor/bootstrap/js/plugin/datatables/datatables.min.js"></script>
     <!-- Page level custom scripts -->
     <script src="../js/demo/chart-area-demo.js"></script>
     <script src="../js/demo/chart-pie-demo.js"></script>
-
+    <script >
+		$(document).ready(function() {
+			$('#add-row').DataTable({
+			});
+		});
+	</script>
 </body>
 
 </html>

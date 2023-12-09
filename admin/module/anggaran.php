@@ -1,6 +1,5 @@
 <?php
 include '../../config/koneksi.php';
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -124,7 +123,7 @@ include '../../config/koneksi.php';
                     </button>
 
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Data Barang</h1>
+                        <h1 class="h3 mb-0 text-gray-800">Data Anggaran</h1>
                     </div>
 
                     <!-- Topbar Navbar -->
@@ -152,7 +151,7 @@ include '../../config/koneksi.php';
 
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="/admin/datamaster.php" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">Admin Inventory</span>
                                 <img class="img-profile rounded-circle" src="/img/undraw_profile.svg">
                             </a>
@@ -171,7 +170,7 @@ include '../../config/koneksi.php';
                                     Activity Log
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="/logout.php" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" href="../../logout.php" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>
@@ -186,59 +185,35 @@ include '../../config/koneksi.php';
                 <div class="card-1 shadow mb-4">
                     <div class="card-1-body">
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
-                            Tambah Barang
+                            Tambah Anggaran
                         </button>
                         <!-- The Modal -->
                         <div class="modal fade" id="myModal">
                             <div class="modal-dialog">
                                 <div class="modal-content">
-
                                     <!-- Modal Header -->
                                     <div class="modal-header">
-                                        <h4 class="modal-title text-primary">Tambah Barang</h4>
+                                        <h4 class="modal-title text-primary">Tambah Anggaran</h4>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                     </div>
-
                                     <!-- Modal Body -->
                                     <div class="modal-body">
                                         <form action="/function/tambah.php" method="post">
                                             <div class="mb-3">
-                                                <label for="namaBarang" class="form-label">Nama Barang</label>
-                                                <input type="text" name="namaBarang" id="namabarang" class="form-control" required>
+                                                <label for="asal" class="form-label">Asal Anggaran</label>
+                                                <input type="text" name="asal" id="asal" class="form-control" required>
                                             </div>
-                                            <div class="mb-3">
-                                                <label for="deskripsi" class="form-label">Deskripsi Barang</label>
-                                                <input type="text" name="deskripsi" id="deskripsi" class="form-control" required>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="stok" class="form-label">Stok Barang</label>
-                                                <input type="number" name="stok" id="stok" class="form-control" required>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="keterangan" class="form-label">Asal Barang</label>
-                                                <select name="asal" id="asal" class="form-control">
-                                                    <?php
-                                                    $result_anggaran = mysqli_query($koneksi, "SELECT * FROM anggaran");
-                                                    while ($row_anggaran = mysqli_fetch_assoc($result_anggaran)) {
-                                                        echo "<option value='" . $row_anggaran['asal'] . "'>" . $row_anggaran['asal'] . "</option>";
-                                                    }
-                                                    ?>
-                                                </select>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="foto" class="form-label">Foto Barang</label>
-                                                <input type="file" name="foto" id="foto" class="form-control" required>
-                                            </div>
-                                            <button type="submit" class="btn btn-primary" name="addnewbarang">Submit</button>
+                                            <button type="submit" class="btn btn-primary" name="addnewanggaran">Submit</button>
                                         </form>
-                                        <!-- <div class="mt-3">
+                                        <!-- CRUD Buttons -->
+                                        <div class="mt-3">
                                             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editModal">
                                                 Edit
                                             </button>
                                             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
                                                 Delete
                                             </button>
-                                        </div> -->
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -249,17 +224,13 @@ include '../../config/koneksi.php';
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Nama Barang</th>
-                                        <th>Deskripsi</th>
-                                        <th>Stok</th>
                                         <th>Asal</th>
-                                        <th>Foto</th>
-                                        <th>Action</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $result = mysqli_query($koneksi, "SELECT * FROM barang");
+                                    $result = mysqli_query($koneksi, "SELECT * FROM anggaran");
 
                                     if ($result) {
                                         if (mysqli_num_rows($result) > 0) {
@@ -267,61 +238,49 @@ include '../../config/koneksi.php';
                                             while ($row = mysqli_fetch_assoc($result)) {
                                                 echo "<tr>";
                                                 echo "<td>" . $no++ . "</td>";
-                                                echo "<td>" . $row['namaBarang'] . "</td>";
-                                                echo "<td>" . $row['deskripsi'] . "</td>";
-                                                echo "<td>" . $row['stok'] . "</td>";
                                                 echo "<td>" . $row['asal'] . "</td>";
-                                                echo "<td>" . $row['foto'] . "</td>";
                                                 // Add action buttons with icons
                                                 echo "<td>
-                                                <button type='button' class='btn btn-info btn-sm' data-bs-toggle='modal' data-bs-target='#editModal" . $row['idBarang'] . "'>Edit</button>
-                                                <button type='button' class='btn btn-danger btn-sm' data-bs-toggle='modal' data-bs-target='#deleteModal'>Delete</button></td>";
-                                                echo "</tr>";
+                                                                    <button type='button' class='btn btn-info btn-sm' data-bs-toggle='modal' data-bs-target='#editModal'>Edit</button>
+                                                                    <button type='button' class='btn btn-danger btn-sm' data-bs-toggle='modal' data-bs-target='#deleteModal'>Delete</button>
+                                                                </td>";
                                                 echo "</tr>";
                                             }
                                         } else {
-                                            echo "<tr><td colspan='4'>Tidak ada data</td></tr>";
+                                            echo "<tr><td colspan='3'>Tidak ada data</td></tr>";
                                         }
                                     } else {
                                         echo "Error: " . mysqli_error($koneksi);
                                     }
                                     ?>
-
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
 
-                <!-- Modal Edit -->
-                <?php $result = mysqli_query($koneksi, "SELECT * FROM barang");
-                foreach ($result as $rowEdit) {
-
-                ?>
-                    <div class="modal fade" id="editModal<?= $rowEdit['idBarang'] ?>">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <!-- Modal Header -->
-                                <div class="modal-header">
-                                    <h4 class="modal-title text-primary">Edit Barang</h4>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                </div>
-                                <!-- Modal Body -->
-                                <div class="modal-body">
-                                    <form action="../../function/update.php" method="post">
-                                        //ini gatau kenapa masih ngebug
-                                        <input type="hidden" name="idBarang" id="editIdBarang" value="<?= $rowEdit['idBarang'] ?>">
-                                        <div class="mb-3">
-                                            <label for="editNama" class="form-label">Nama Barang</label>
-                                            <input type="text" name="editNama" id="editNama" class="form-control" required>
-                                        </div>
-                                        <button type="submit" class="btn btn-primary" name="editbarang">Simpan Perubahan</button>
-                                    </form>
-                                </div>
+                <!-- Edit Modal -->
+                <div class="modal fade" id="editModal">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <!-- Modal Header -->
+                            <div class="modal-header">
+                                <h4 class="modal-title text-primary">Edit Anggaran</h4>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <!-- Modal Body -->
+                            <div class="modal-body">
+                                <form action="/function/update.php" method="post">
+                                    <div class="mb-3">
+                                        <label for="editAsal" class="form-label">Asal Anggaran</label>
+                                        <input type="text" name="editAsal" id="editAsal" class="form-control" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary" name="editanggaran">Save Changes</button>
+                                </form>
                             </div>
                         </div>
                     </div>
-                <?php } ?>
+                </div>
 
                 <!-- Delete Modal -->
                 <div class="modal fade" id="deleteModal">
@@ -329,26 +288,25 @@ include '../../config/koneksi.php';
                         <div class="modal-content">
                             <!-- Modal Header -->
                             <div class="modal-header">
-                                <h4 class="modal-title text-danger">Delete Barang</h4>
+                                <h4 class="modal-title text-danger">Delete Anggaran</h4>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
                             <!-- Modal Body -->
                             <div class="modal-body">
-                                <p>Are you sure you want to delete this barang?</p>
+                                <p>Are you sure you want to delete this anggaran?</p>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" onclick="deleteBarang()">Delete</button>
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" onclick="deleteAnggaran()">Delete</button>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <script>
-                    function deleteBarang() {
+                    function deleteAnggaran() {
                         // Add your delete logic here
                         alert("Delete function will be implemented here.");
                     }
                 </script>
-
                 <!-- Begin Page Content -->
             </div>
             <!-- End of Main Content -->
