@@ -1,5 +1,9 @@
 <?php
 include '../../../config/koneksi.php';
+include '../../../OOP/user.php';
+
+$user = new User($koneksi);
+$allUsers = $user->getAllUsers();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -66,7 +70,7 @@ include '../../../config/koneksi.php';
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Components:</h6>
                         <a class="collapse-item" href="../anggaran.php">Anggaran</a>
-                        <a class="collapse-item" href="../barang.php">Tambah Barang</a>
+                        <a class="collapse-item" href="../barang.php">Barang</a>
                     </div>
                 </div>
             </li>
@@ -266,9 +270,7 @@ include '../../../config/koneksi.php';
                                             if (mysqli_num_rows($result) > 0) {
                                                 $no = 1;
                                                 while ($row = mysqli_fetch_assoc($result)) {
-                                                    // Determine the color based on the 'Status' (case-insensitive comparison)
-                                                    $statusColor = (strtolower($row['status']) == 'aktif') ? 'green' : 'red';
-
+                                                    $statusColor = (strtolower($row['status']) == 'aktif') ? '#00FF00' : 'red';
                                                     echo "<tr>";
                                                     echo "<td>" . $no++ . "</td>";
                                                     echo "<td>" . $row['nama_lengkap'] . "</td>";
@@ -320,7 +322,7 @@ include '../../../config/koneksi.php';
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="/login.php">Logout</a>
+                    <a class="btn btn-primary" href="../../../logout.php">Logout</a>
                 </div>
             </div>
         </div>

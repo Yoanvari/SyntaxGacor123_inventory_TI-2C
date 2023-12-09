@@ -1,5 +1,6 @@
 <?php
 include '../../config/koneksi.php';
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -66,7 +67,7 @@ include '../../config/koneksi.php';
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Components:</h6>
                         <a class="collapse-item" href="anggaran.php">Anggaran</a>
-                        <a class="collapse-item" href="barang.php">Tambah Barang</a>
+                        <a class="collapse-item" href="barang.php">Barang</a>
                     </div>
                 </div>
             </li>
@@ -239,6 +240,14 @@ include '../../config/koneksi.php';
                                             </div>
                                             <button type="submit" class="btn btn-primary" name="addnewbarang">Submit</button>
                                         </form>
+                                        <!-- <div class="mt-3">
+                                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editModal">
+                                                Edit
+                                            </button>
+                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                                Delete
+                                            </button>
+                                        </div> -->
                                     </div>
                                 </div>
                             </div>
@@ -254,6 +263,7 @@ include '../../config/koneksi.php';
                                             <th>Stok</th>
                                             <th>Asal</th>
                                             <th>Foto</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -271,6 +281,11 @@ include '../../config/koneksi.php';
                                                 echo "<td>" . $row['stok'] . "</td>";
                                                 echo "<td>" . $row['asal'] . "</td>";
                                                 echo "<td>" . $row['foto'] . "</td>";
+                                                // Add action buttons with icons
+                                                echo "<td>
+                                                <button type='button' class='btn btn-info btn-sm' data-bs-toggle='modal' data-bs-target='#editModal'>Edit</button>
+                                                <button type='button' class='btn btn-danger btn-sm' data-bs-toggle='modal' data-bs-target='#deleteModal'>Delete</button></td>";
+                                                echo "</tr>";
                                                 echo "</tr>";
                                             }
                                         } else {
@@ -286,6 +301,57 @@ include '../../config/koneksi.php';
                             </div>
                         </div>
                     </div>
+                     
+                    <!-- Modal Edit -->
+                    <div class="modal fade" id="editModal">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <!-- Modal Header -->
+                                <div class="modal-header">
+                                    <h4 class="modal-title text-primary">Edit Barang</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <!-- Modal Body -->
+                                <div class="modal-body">
+                                    <form action="/function/update.php" method="post">
+                                        <!-- Input tersembunyi untuk idBarang -->
+                                        <input type="hidden" name="idBarang" id="editIdBarang" value="idBarang">
+                                        <div class="mb-3">
+                                            <label for="editNama" class="form-label">Nama Barang</label>
+                                            <input type="text" name="editNama" id="editNama" class="form-control" required>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary" name="editbarang">Simpan Perubahan</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Delete Modal -->
+                    <div class="modal fade" id="deleteModal">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <!-- Modal Header -->
+                                <div class="modal-header">
+                                    <h4 class="modal-title text-danger">Delete Barang</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <!-- Modal Body -->
+                                <div class="modal-body">
+                                    <p>Are you sure you want to delete this barang?</p>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" onclick="deleteBarang()">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        function deleteBarang() {
+                            // Add your delete logic here
+                            alert("Delete function will be implemented here.");
+                        }
+                    </script>
 
                 <!-- Begin Page Content -->
             </div>
@@ -315,7 +381,7 @@ include '../../config/koneksi.php';
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="/login.php">Logout</a>
+                    <a class="btn btn-primary" href="../../logout.php">Logout</a>
                 </div>
             </div>
         </div>
