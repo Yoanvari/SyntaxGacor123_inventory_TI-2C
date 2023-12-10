@@ -10,13 +10,14 @@ if (!empty($_SESSION['username'])) {
     if (isset($_POST['editbarang'])) { // Change to 'editbarang'
         // Assuming the 'editNama' field exists in your form
         $idBarang = mysqli_real_escape_string($koneksi, $_POST['idBarang']);
-        $namaBarang = mysqli_real_escape_string($koneksi, $_POST['editNama']); 
+        $namaBarang = mysqli_real_escape_string($koneksi, $_POST['editNama']);
 
         // Query to update barang
         $update_barang = mysqli_query($koneksi, "UPDATE barang SET namaBarang='$namaBarang' WHERE idBarang=$idBarang");
 
         if ($update_barang) {
             echo "Data barang berhasil diupdate.";
+            header('Location: ../admin/module/barang.php');
         } else {
             echo "Gagal update data barang: " . mysqli_error($koneksi);
         }
@@ -26,4 +27,3 @@ if (!empty($_SESSION['username'])) {
     echo "You are not logged in.";
     // You might want to redirect the user to a login page or take appropriate action
 }
-?>
