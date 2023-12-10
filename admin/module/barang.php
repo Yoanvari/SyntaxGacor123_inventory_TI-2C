@@ -201,7 +201,7 @@ include '../../config/koneksi.php';
 
                                     <!-- Modal Body -->
                                     <div class="modal-body">
-                                        <form action="/function/tambah.php" method="post">
+                                        <form action="../../function/tambah.php" method="post" enctype="multipart/form-data">
                                             <div class="mb-3">
                                                 <label for="namaBarang" class="form-label">Nama Barang</label>
                                                 <input type="text" name="namaBarang" id="namabarang" class="form-control" required>
@@ -226,8 +226,8 @@ include '../../config/koneksi.php';
                                                 </select>
                                             </div>
                                             <div class="mb-3">
-                                                <label for="foto" class="form-label">Foto Barang</label>
-                                                <input type="file" name="foto" id="foto" class="form-control" required>
+                                                <label for="foto" class="form-label">Foto Barang</label><br>
+                                                <input type="file" name="foto" id="foto" class="" required>
                                             </div>
                                             <button type="submit" class="btn btn-primary" name="addnewbarang">Submit</button>
                                         </form>
@@ -271,7 +271,8 @@ include '../../config/koneksi.php';
                                                 echo "<td>" . $row['deskripsi'] . "</td>";
                                                 echo "<td>" . $row['stok'] . "</td>";
                                                 echo "<td>" . $row['asal'] . "</td>";
-                                                echo "<td>" . $row['foto'] . "</td>";
+                                                echo "<td><img src='../../img/" . $row['foto'] . "' alt='Gambar Barang'
+                                                width='100px'></td>";
                                                 // Add action buttons with icons
                                                 echo "<td>
                                                 <button type='button' class='btn btn-info btn-sm' data-bs-toggle='modal' data-bs-target='#editModal" . $row['idBarang'] . "'>Edit</button>
@@ -308,14 +309,36 @@ include '../../config/koneksi.php';
                                 </div>
                                 <!-- Modal Body -->
                                 <div class="modal-body">
-                                    <form action="../../function/update.php" method="post">
-                                        //ini gatau kenapa masih ngebug
-                                        <input type="hidden" name="idBarang" id="editIdBarang" value="<?= $rowEdit['idBarang'] ?>">
+                                    <form action="../../function/update.php" method="post" enctype="multipart/form-data">
                                         <div class="mb-3">
-                                            <label for="editNama" class="form-label">Nama Barang</label>
-                                            <input type="text" name="editNama" id="editNama" class="form-control" required>
+                                            <input type="hidden" name="idBarang" value="<?= $rowEdit['idBarang'] ?>">
+                                            <label for="namaBarang" class="form-label">Nama Barang</label>
+                                            <input type="text" name="namaBarang" id="namabarang" class="form-control" required>
                                         </div>
-                                        <button type="submit" class="btn btn-primary" name="editbarang">Simpan Perubahan</button>
+                                        <div class="mb-3">
+                                            <label for="deskripsi" class="form-label">Deskripsi Barang</label>
+                                            <input type="text" name="deskripsi" id="deskripsi" class="form-control" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="stok" class="form-label">Stok Barang</label>
+                                            <input type="number" name="stok" id="stok" class="form-control" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="keterangan" class="form-label">Asal Barang</label>
+                                            <select name="asal" id="asal" class="form-control">
+                                                <?php
+                                                $result_anggaran = mysqli_query($koneksi, "SELECT * FROM anggaran");
+                                                while ($row_anggaran = mysqli_fetch_assoc($result_anggaran)) {
+                                                    echo "<option value='" . $row_anggaran['asal'] . "'>" . $row_anggaran['asal'] . "</option>";
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="foto" class="form-label">Foto Barang</label><br>
+                                            <input type="file" name="foto" id="foto" class="" required>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary" name="editbarang">Submit</button>
                                     </form>
                                 </div>
                             </div>

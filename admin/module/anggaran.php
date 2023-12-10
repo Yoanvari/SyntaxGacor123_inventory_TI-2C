@@ -198,7 +198,7 @@ include '../../config/koneksi.php';
                                     </div>
                                     <!-- Modal Body -->
                                     <div class="modal-body">
-                                        <form action="/function/tambah.php" method="post">
+                                        <form action="../../function/tambah.php" method="post">
                                             <div class="mb-3">
                                                 <label for="asal" class="form-label">Asal Anggaran</label>
                                                 <input type="text" name="asal" id="asal" class="form-control" required>
@@ -206,14 +206,14 @@ include '../../config/koneksi.php';
                                             <button type="submit" class="btn btn-primary" name="addnewanggaran">Submit</button>
                                         </form>
                                         <!-- CRUD Buttons -->
-                                        <div class="mt-3">
+                                        <!-- <div class="mt-3">
                                             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editModal">
                                                 Edit
                                             </button>
                                             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
                                                 Delete
                                             </button>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
                             </div>
