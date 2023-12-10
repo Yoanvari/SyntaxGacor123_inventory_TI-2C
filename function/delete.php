@@ -1,21 +1,32 @@
 <?php
-include('koneksi.php'); // Make sure to include your database connection file
+session_start();
 
-if (isset($_POST['updatebarang'])) {
-    $id_barang = mysqli_real_escape_string($koneksi, $_POST['id_barang']);
-    $namaBarang = mysqli_real_escape_string($koneksi, $_POST['namaBarang']);
-    $deskripsi = mysqli_real_escape_string($koneksi, $_POST['deskripsi']);
-    $stok = mysqli_real_escape_string($koneksi, $_POST['stok']);
-    $foto = mysqli_real_escape_string($koneksi, $_POST['foto']);
-    $asal = mysqli_real_escape_string($koneksi, $_POST['asal']);
+// Include file koneksi.php dan fungsi-fungsi lainnya
+require '../config/koneksi.php';
+require '../function/pesan_kilat.php';
+require '../function/anti_injection.php';
 
-    // Query to update barang
-    $update_barang = mysqli_query($koneksi, "UPDATE barang SET namaBarang='$namaBarang', deskripsi='$deskripsi', stok='$stok', foto='$foto', asal='$asal' WHERE id_barang=$id_barang");
+// Mendapatkan nilai $id_barang dari formulir POST atau sumber data lainnya
+$id_barang = isset($_POST['id_barang']) ? $_POST['id_barang'] : null;
 
-    if ($update_barang) {
-        echo "Data barang berhasil diupdate.";
+// Mengeksekusi fungsi deleteBarang dengan AJAX jika $id_barang sudah terdefinisi
+if (isset($id_barang) && isset($_POST['deleteBarang'])) {
+    deleteBarang($koneksi, $id_barang);
+}
+
+// Fungsi untuk menghapus data barang
+function deleteBarang($koneksi, $id_barang) {
+    // Menggunakan prepared statement untuk mencegah SQL injection
+    $stmt = mysqli_prepare($koneksi, "DELETE FROM barang WHERE idBarang = ?");
+    mysqli_stmt_bind_param($stmt, "i", $id_barang);
+
+    if (mysqli_stmt_execute($stmt)) {
+        echo "Data barang berhasil dihapus.";
     } else {
-        echo "Gagal update data barang: " . mysqli_error($koneksi);
+        echo "Gagal menghapus data barang: " . mysqli_error($koneksi);
     }
+
+    // Menutup statement
+    mysqli_stmt_close($stmt);
 }
 ?>

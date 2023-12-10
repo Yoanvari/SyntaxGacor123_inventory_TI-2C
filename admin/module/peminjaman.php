@@ -1,32 +1,20 @@
 <?php
-session_start();
-include '../config/koneksi.php';
+include '../../config/koneksi.php';
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
     <title>INVENTORY JTI</title>
-
-    <!-- Custom fonts for this template-->
-    <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
-    <!-- Custom styles for this template-->
-    <link href="../css/sb-admin-2.css" rel="stylesheet">
-    <style>
-        #add-row {
-            padding-top: 0;
-            padding-bottom: 0;
-        }
-    </style>
+    <link href="../../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <link href="../../css/sb-admin-2.css" rel="stylesheet">
+    <link href="../../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 </head>
 
 <body id="page-top">
@@ -47,7 +35,7 @@ include '../config/koneksi.php';
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="?view=dashboard">
+                <a class="nav-link" href="../../index.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
@@ -62,7 +50,7 @@ include '../config/koneksi.php';
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                <a class="nav-link collapsed" href="/admin/datamaster.php" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Data Master</span>
@@ -70,31 +58,11 @@ include '../config/koneksi.php';
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Components:</h6>
-                        <a class="collapse-item" href="?view=tambahBarang">Tambah Barang</a>
-                        <a class="collapse-item" href="?view=barangMasuk">Barang Masuk</a>
-                        <a class="collapse-item" href="?view=barangKeluar">Barang Keluar</a>
+                        <a class="collapse-item" href="anggaran.php">Anggaran</a>
+                        <a class="collapse-item" href="barang.php">Barang</a>
                     </div>
                 </div>
             </li>
-
-            <!-- Nav Item - Utilities Collapse Menu -->
-            <!-- <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                    aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-fw fa-wrench"></i>
-                    <span>Utilities</span>
-                </a>
-                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Utilities:</h6>
-                        <a class="collapse-item" href="utilities-color.html">Colors</a>
-                        <a class="collapse-item" href="utilities-border.html">Borders</a>
-                        <a class="collapse-item" href="utilities-animation.html">Animations</a>
-                        <a class="collapse-item" href="utilities-other.html">Other</a>
-                    </div>
-                </div>
-            </li> -->
 
             <!-- Divider -->
             <hr class="sidebar-divider">
@@ -104,39 +72,25 @@ include '../config/koneksi.php';
                 Addons
             </div>
 
-            <!-- Nav Item - Pages Collapse Menu -->
-            <!-- <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-                    aria-expanded="true" aria-controls="collapsePages">
-                    <i class="fas fa-fw fa-folder"></i>
-                    <span>Pages</span>
-                </a>
-                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Login Screens:</h6>
-                        <a class="collapse-item" href="login.html">Login</a>
-                        <a class="collapse-item" href="register.html">Register</a>
-                        <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-                        <div class="collapse-divider"></div>
-                        <h6 class="collapse-header">Other Pages:</h6>
-                        <a class="collapse-item" href="404.html">404 Page</a>
-                        <a class="collapse-item" href="blank.html">Blank Page</a>
-                    </div>
-                </div>
-            </li> -->
-
             <!-- Nav Item - Charts -->
             <li class="nav-item">
-                <a class="nav-link" href="?view=peminjaman">
+                <a class="nav-link" href="peminjaman.php">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Peminjaman</span></a>
             </li>
 
+
+            <li class="nav-item">
+                <a class="nav-link" href="charts.html">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>History Peminjaman</span></a>
+            </li>
+
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="?view=dataAdmin">
+                <a class="nav-link" href="./list_user/list.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>Data Admin</span></a>
+                    <span>List User</span></a>
             </li>
 
 
@@ -144,13 +98,6 @@ include '../config/koneksi.php';
             <div class="text-center d-none d-md-inline">
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>
             </div>
-
-            <!-- Sidebar Message -->
-            <!-- <div class="sidebar-card d-none d-lg-flex">
-                <img class="sidebar-card-illustration mb-2" src="img/undraw_rocket.svg" alt="...">
-                <p class="text-center mb-2"><strong>SB Admin Pro</strong> is packed with premium features, components, and more!</p>
-                <a class="btn btn-success btn-sm" href="https://startbootstrap.com/theme/sb-admin-pro">Upgrade to Pro!</a>
-            </div> -->
 
         </ul>
         <!-- End of Sidebar -->
@@ -160,6 +107,7 @@ include '../config/koneksi.php';
 
             <!-- Main Content -->
             <div id="content">
+                
 
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
@@ -169,19 +117,9 @@ include '../config/koneksi.php';
                         <i class="fa fa-bars"></i>
                     </button>
 
-                    <!-- Topbar Search -->
-                    <form
-                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                        <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                                aria-label="Search" aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
-                                    <i class="fas fa-search fa-sm"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">Data Peminjaman</h1>
+                    </div>
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -216,7 +154,7 @@ include '../config/koneksi.php';
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">Admin Inventory</span>
                                 <img class="img-profile rounded-circle"
-                                    src="../img/undraw_profile.svg">
+                                    src="../../img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -234,7 +172,7 @@ include '../config/koneksi.php';
                                     Activity Log
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="/login.php" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" href="/logout.php" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>
@@ -245,60 +183,70 @@ include '../config/koneksi.php';
 
                 </nav>
                 <!-- End of Topbar -->
-
-                <!-- Begin Page Content -->
                 <div class="container-fluid">
-                    <div class="row py-0">
-                        <div class="col-md-12">
-                            <div class="card shadow-sm">
-                                <div class="card-header">
-                                    <div class="d-flex align-items-center">
-                						<h5 class="card-title">Data Pinjam Ruangan</h5>
-                					</div>
-                                </div>
-                                <div class="card-body">
-                                    <table id="add-row" class="table table-striped table-hover my-0">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">No</th>
-                                                <th scope="col">Nama Barang</th>
-                                                <th scope="col">Tgl Mulai</th>
-                                                <th scope="col">Tgl Selesai</th>
-                                                <th scope="col">Jumlah Pinjam</th>
-                                                <th scope="col">Lokasi Barang</th>
-                                                <th scope="col">Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        <?php
-                						    $no = 1;
-                						    $query = mysqli_query($koneksi,'SELECT pinjambarang.id, pinjambarang.id_barang, pinjambarang.id_user, pinjambarang.tgl_mulai, pinjambarang.tgl_selesai, pinjambarang.qty, pinjambarang.lokasi_barang, pinjambarang.status, barang.nama_barang from pinjambarang inner join barang on barang.id=pinjambarang.id_barang inner join user on user.id=pinjambarang.id_user');
-                						    while ($pinjambarang = mysqli_fetch_array($query)) {
-                						?>
-                						<tr>
-                							<td><?php echo $no++ ?></td>
-                							<td><?php echo $pinjambarang['nama_barang'] ?></td>
-                							<td><?php echo $pinjambarang['tgl_mulai'] ?></td>
-                							<td><?php echo $pinjambarang['tgl_selesai'] ?></td>
-                							<td><?php echo $pinjambarang['qty'] ?></td>
-                                            <td><?php echo $pinjambarang['lokasi_barang'] ?></td>
-                							<td>
-                								<?php if($pinjambarang['status'] == 'menunggu') { ?>
-                								<div class="badge badge-danger"><?php echo $pinjambarang['status'] ?></div>
-                								<?php }else { ?>
-                									<div class="badge rounded-pill badge-success"><?php echo $pinjambarang['status'] ?></div>
-                								<?php } ?>
-                							</td>
-                						</tr>
-                						<?php } ?>
-                                        </tbody>
-                                      </table>
-                                </div>
-                            </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card shadow-sm">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center">
+                            <h5 class="card-title">Data Pinjaman Barang</h5>
                         </div>
                     </div>
+                    <div class="card-body">
+                        <table id="add-row" class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">No</th>
+                                    <th scope="col">Nama Barang</th>
+                                    <th scope="col">Tgl Mulai</th>
+                                    <th scope="col">Tgl Selesai</th>
+                                    <th scope="col">Jumlah Pinjam</th>
+                                    <th scope="col">Lokasi Barang</th>
+                                    <th scope="col">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $result = mysqli_query($koneksi, 'SELECT pinjambarang.id, pinjambarang.id_barang, pinjambarang.id_user, pinjambarang.tgl_mulai, pinjambarang.tgl_selesai, pinjambarang.qty, pinjambarang.lokasi_barang, pinjambarang.status, barang.namaBarang FROM pinjambarang INNER JOIN barang ON barang.idBarang=pinjambarang.id_barang INNER JOIN user ON user.id=pinjambarang.id_user');
+
+                                if ($result) {
+                                    if (mysqli_num_rows($result) > 0) {
+                                        $no = 1;
+                                        while ($row = mysqli_fetch_assoc($result)) {
+                                            echo "<tr>";
+                                            echo "<td>" . $no++ . "</td>";
+                                            echo "<td>" . (isset($row['namaBarang']) ? $row['namaBarang'] : '') . "</td>";
+                                            echo "<td>" . (isset($row['tgl_mulai']) ? $row['tgl_mulai'] : '') . "</td>";
+                                            echo "<td>" . (isset($row['tgl_selesai']) ? $row['tgl_selesai'] : '') . "</td>";
+                                            echo "<td>" . (isset($row['qty']) ? $row['qty'] : '') . "</td>";
+                                            echo "<td>" . (isset($row['lokasi_barang']) ? $row['lokasi_barang'] : '') . "</td>";
+                                            // Add action buttons with icons
+                                            echo "<td>";
+                                            if ($row['status'] == 'menunggu') {
+                                                echo "<div class='badge badge-danger'>" . $row['status'] . "</div>";
+                                            } else {
+                                                echo "<div class='badge rounded-pill badge-success'>" . $row['status'] . "</div>";
+                                            }
+                                            echo "</td>";
+                                            echo "</tr>";
+                                        }
+                                    } else {
+                                        echo "<tr><td colspan='7'>Tidak ada data</td></tr>";
+                                    }
+                                } else {
+                                    echo "Error: " . mysqli_error($koneksi);
+                                }
+                                ?>
+                            </tbody>
+
+                        </table>
+                    </div>
                 </div>
-                <!-- /.container-fluid -->
+            </div>
+        </div>
+    </div>
+
+                <!-- Begin Page Content -->
             </div>
             <!-- End of Main Content -->
         </div>
@@ -326,33 +274,24 @@ include '../config/koneksi.php';
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="../login.php">Logout</a>
+                    <a class="btn btn-primary" href="../../logout.php">Logout</a>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Bootstrap core JavaScript-->
-    <script src="../vendor/jquery/jquery.3.2.1.min.js"></script>
-    <script src="../vendor/jquery/jquery.min.js"></script>
-    <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../../vendor/jquery/jquery.min.js"></script>
+    <script src="../../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- Core plugin JavaScript-->
-    <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="../../vendor/jquery-easing/jquery.easing.min.js"></script>
     <!-- Custom scripts for all pages-->
-    <script src="../js/sb-admin-2.min.js"></script>
+    <script src="../../js/sb-admin-2.min.js"></script>
     <!-- Page level plugins -->
-    <script src="../vendor/chart.js/Chart.min.js"></script>
-    <!--Datatables-->
-    <script src="../vendor/bootstrap/js/plugin/datatables/datatables.min.js"></script>
+    <script src="../../vendor/chart.js/Chart.min.js"></script>
     <!-- Page level custom scripts -->
-    <script src="../js/demo/chart-area-demo.js"></script>
-    <script src="../js/demo/chart-pie-demo.js"></script>
-    <script >
-		$(document).ready(function() {
-			$('#add-row').DataTable({
-			});
-		});
-	</script>
-</body>
+    <script src="../../js/demo/chart-area-demo.js"></script>
+    <script src="../../js/demo/chart-pie-demo.js"></script>
 
+</body>
 </html>
