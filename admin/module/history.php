@@ -1,12 +1,6 @@
 <?php
-session_start();
 include '../../config/koneksi.php';
-// untuk admin
-if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
-    // Jika tidak, redirect ke login.php
-    header('Location: ../login.php');
-    exit();
-}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -82,15 +76,15 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
             </div>
 
             <!-- Nav Item - Charts -->
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="peminjaman.php">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Peminjaman</span></a>
             </li>
 
 
-            <li class="nav-item">
-                <a class="nav-link" href="history.php">
+            <li class="nav-item active ">
+                <a class="nav-link" href="charts.html">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>History Peminjaman</span></a>
             </li>
@@ -173,6 +167,10 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
+                                <!-- <a class="dropdown-item" href="#">
+                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Settings
+                                </a> -->
                                 <a class="dropdown-item" href="#">
                                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Activity Log
@@ -186,11 +184,10 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                             </div>
                         </li>
 
-
                     </ul>
 
                 </nav>
-                <!-- End of Topbar -->
+
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-12">
@@ -216,7 +213,8 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                                         <tbody>
                                             <?php
                                             $no = 1;
-                                            $query = mysqli_query($koneksi, 'SELECT pinjambarang.id, pinjambarang.id_barang, pinjambarang.id_user, pinjambarang.tgl_mulai, pinjambarang.tgl_selesai, pinjambarang.qty, pinjambarang.lokasi_barang, pinjambarang.status, barang.namaBarang from pinjambarang inner join barang on barang.idBarang=pinjambarang.id_barang inner join user on user.id=pinjambarang.id_user');
+                                            // Kueri dengan kondisi WHERE untuk menampilkan hanya yang sudah selesai
+                                            $query = mysqli_query($koneksi, 'SELECT pinjambarang.id, pinjambarang.id_barang, pinjambarang.id_user, pinjambarang.tgl_mulai, pinjambarang.tgl_selesai, pinjambarang.qty, pinjambarang.lokasi_barang, pinjambarang.status, barang.namaBarang FROM pinjambarang INNER JOIN barang ON barang.idBarang=pinjambarang.id_barang INNER JOIN user ON user.id=pinjambarang.id_user WHERE pinjambarang.tgl_selesai < NOW()');
                                             while ($pinjambarang = mysqli_fetch_array($query)) {
                                                 ?>
                                                 <tr>
@@ -252,14 +250,12 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                                                 </tr>
                                             <?php } ?>
                                         </tbody>
-
                                     </table>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
                 <!-- Begin Page Content -->
             </div>
             <!-- End of Main Content -->

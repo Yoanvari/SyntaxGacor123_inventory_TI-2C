@@ -1,5 +1,15 @@
 <?php
+session_start();
 include '../../config/koneksi.php';
+include '../../OOP/Admin.php';
+$koneksi = new DatabaseConnection();
+$Admin = new Admin($koneksi->getConnection());
+// untuk admin
+if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+    // Jika tidak, redirect ke login.php
+    header('Location: ../login.php');
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,6 +30,16 @@ include '../../config/koneksi.php';
     <link href="../../css/sb-admin-2.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
     <link href="../../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <!-- Sertakan CSS DataTables -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
+
+    <!-- Sertakan JS dan jQuery DataTables -->
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+
+    <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+
 
 </head>
 
@@ -40,8 +60,8 @@ include '../../config/koneksi.php';
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item - Dashboard -->
-            <li class="nav-item active">
-                <a class="nav-link" href="/index.php">
+            <li class="nav-item">
+                <a class="nav-link" href="../../index.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
@@ -55,7 +75,7 @@ include '../../config/koneksi.php';
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
+            <li class="nav-item active ">
                 <a class="nav-link collapsed" href="/admin/datamaster.php" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Data Master</span>
@@ -79,14 +99,14 @@ include '../../config/koneksi.php';
 
             <!-- Nav Item - Charts -->
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
+                <a class="nav-link" href="peminjaman.php">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Peminjaman</span></a>
             </li>
 
 
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
+                <a class="nav-link" href="history.php">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>History Peminjaman</span></a>
             </li>
@@ -151,20 +171,22 @@ include '../../config/koneksi.php';
 
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="/admin/datamaster.php" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Admin Inventory</span>
-                                <img class="img-profile rounded-circle" src="/img/undraw_profile.svg">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+                                    <?php echo isset($_SESSION['nama_lengkap']) ? $_SESSION['nama_lengkap'] : 'Nama Pengguna'; ?>
+                                </span>
+                                <img class="img-profile rounded-circle" src="../../img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="../module/profile/profile.php">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
-                                <a class="dropdown-item" href="#">
+                                <!-- <a class="dropdown-item" href="#">
                                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Settings
-                                </a>
+                                </a> -->
                                 <a class="dropdown-item" href="#">
                                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Activity Log
@@ -180,13 +202,16 @@ include '../../config/koneksi.php';
                     </ul>
 
                 </nav>
-                <!-- End of Topbar -->
-                <!-- DataTales Example -->
                 <div class="card-1 shadow mb-4">
                     <div class="card-1-body">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
-                            Tambah Anggaran
-                        </button>
+                        <div class="card-1-body d-flex align-items-center justify-content-between">
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
+                                Tambah Anggaran
+                            </button>
+                            <!-- <div class="mb-3">
+                                <input type="text" id="search" class="form-control" onkeyup="searchTable()" placeholder="Cari..." style="max-width: 200px;">
+                            </div> -->
+                        </div>
                         <!-- The Modal -->
                         <div class="modal fade" id="myModal">
                             <div class="modal-dialog">
@@ -198,108 +223,127 @@ include '../../config/koneksi.php';
                                     </div>
                                     <!-- Modal Body -->
                                     <div class="modal-body">
-                                        <form action="../../function/tambah.php" method="post">
+
+                                        <form action="tambah_anggaran.php" method="post" enctype="multipart/form-data">
+
+               
                                             <div class="mb-3">
                                                 <label for="asal" class="form-label">Asal Anggaran</label>
                                                 <input type="text" name="asal" id="asal" class="form-control" required>
                                             </div>
+                                            <div class="mb-3">
+                                                <label for="tahun_penerimaan" class="form-label">Tahun
+                                                    Penerimaan</label>
+                                                <input type="date" name="tahun_penerimaan" id="tahun_penerimaan" class="form-control" required>
+                                            </div>
                                             <button type="submit" class="btn btn-primary" name="addnewanggaran">Submit</button>
                                         </form>
-                                        <!-- CRUD Buttons -->
-                                        <!-- <div class="mt-3">
-                                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editModal">
-                                                Edit
-                                            </button>
-                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
-                                                Delete
-                                            </button>
-                                        </div> -->
+
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <div class="table-responsive">
-                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                <thead>
+                            <table class="table table-bordered table-striped table-hover" id="tabelAnggaran" width="100%" cellspacing="0">
+                                <thead class="thead-dark">
                                     <tr>
                                         <th>No</th>
                                         <th>Asal</th>
+                                        <th>Tahun Penerimaan</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $result = mysqli_query($koneksi, "SELECT * FROM anggaran");
-
-                                    if ($result) {
-                                        if (mysqli_num_rows($result) > 0) {
-                                            $no = 1;
-                                            while ($row = mysqli_fetch_assoc($result)) {
-                                                echo "<tr>";
-                                                echo "<td>" . $no++ . "</td>";
-                                                echo "<td>" . $row['asal'] . "</td>";
-                                                // Add action buttons with icons
-                                                echo "<td>
-                                                                    <button type='button' class='btn btn-info btn-sm' data-bs-toggle='modal' data-bs-target='#editModal'>Edit</button>
-                                                                    <button type='button' class='btn btn-danger btn-sm' data-bs-toggle='modal' data-bs-target='#deleteModal'>Delete</button>
-                                                                </td>";
-                                                echo "</tr>";
-                                            }
-                                        } else {
-                                            echo "<tr><td colspan='3'>Tidak ada data</td></tr>";
-                                        }
-                                    } else {
-                                        echo "Error: " . mysqli_error($koneksi);
-                                    }
+                                    $Admin->tabelAnggaran();
                                     ?>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
+                <script>
+                    function searchTable() {
+                        const searchText = document.getElementById('search').value.toLowerCase();
+                        const table = document.getElementById('dataTable');
+                        const rows = table.getElementsByTagName('tr');
 
-                <!-- Edit Modal -->
-                <div class="modal fade" id="editModal">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <!-- Modal Header -->
-                            <div class="modal-header">
-                                <h4 class="modal-title text-primary">Edit Anggaran</h4>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
-                            <!-- Modal Body -->
-                            <div class="modal-body">
-                                <form action="/function/update.php" method="post">
-                                    <div class="mb-3">
-                                        <label for="editAsal" class="form-label">Asal Anggaran</label>
-                                        <input type="text" name="editAsal" id="editAsal" class="form-control" required>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary" name="editanggaran">Save Changes</button>
-                                </form>
+                        for (let i = 0; i < rows.length; i++) {
+                            const cells = rows[i].getElementsByTagName('td');
+                            let found = false;
+
+                            for (let j = 0; j < cells.length; j++) {
+                                const cellText = cells[j].innerText.toLowerCase();
+
+                                if (cellText.includes(searchText)) {
+                                    found = true;
+                                    break;
+                                }
+                            }
+
+                            if (found) {
+                                rows[i].style.display = '';
+                            } else {
+                                rows[i].style.display = 'none';
+                            }
+                        }
+                    }
+                </script>
+                <!-- Modal Edit -->
+                <?php
+                $result = mysqli_query($koneksi->getConnection(), "SELECT * FROM anggaran");
+                foreach ($result as $rowEdit) {
+                ?>
+                    <div class="modal fade" id="editModal<?= $rowEdit['idAnggaran'] ?>">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <!-- Modal Header -->
+                                <div class="modal-header">
+                                    <h4 class="modal-title text-primary">Edit Anggaran</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <!-- Modal Body -->
+                                <div class="modal-body">
+                                    <form action="../../function/update.php" method="post">
+                                        <div class="mb-3">
+                                            <input type="hidden" name="idAnggaran" value="<?= $rowEdit['idAnggaran'] ?>">
+                                            <label for="asal" class="form-label">Asal Anggaran</label>
+                                            <input type="text" name="asal" id="asal" class="form-control" value="<?= $rowEdit['asal'] ?>" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <input type="hidden" name="idAnggaran" value="<?= $rowEdit['idAnggaran'] ?>">
+                                            <label for="tahun_penerimaan" class="form-label">Tahun Penerimaan</label>
+                                            <input type="date" name="tahun_penerimaan" id="tahun_penerimaan" class="form-control" value="<?= $rowEdit['tahun_penerimaan'] ?>" required>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary" name="editanggaran">Submit</button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Delete Modal -->
-                <div class="modal fade" id="deleteModal">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <!-- Modal Header -->
-                            <div class="modal-header">
-                                <h4 class="modal-title text-danger">Delete Anggaran</h4>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
-                            <!-- Modal Body -->
-                            <div class="modal-body">
-                                <p>Are you sure you want to delete this anggaran?</p>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" onclick="deleteAnggaran()">Delete</button>
+
+
+                    <!-- Delete Modal -->
+                    <div class="modal fade" id="deleteModal<?= $rowEdit['idAnggaran'] ?>">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <!-- Modal Header -->
+                                <div class="modal-header">
+                                    <h4 class="modal-title text-danger">Delete Anggaran</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <!-- Modal Body -->
+                                <div class="modal-body">
+                                    <p>Are you sure you want to delete this anggaran?</p>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <a href="../../function/delete.php?id=<?= $rowEdit['idAnggaran'] ?>&type=anggaran" class="btn btn-danger">delete</a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                <?php } ?>
 
                 <script>
                     function deleteAnggaran() {
@@ -339,6 +383,13 @@ include '../../config/koneksi.php';
             </div>
         </div>
     </div>
+    <script>
+        $(document).ready(function() {
+            $('#dataTable').DataTable({
+                "pageLength": 10, // Menampilkan 10 entries per halaman
+            });
+        });
+    </script>
 
     <!-- Bootstrap core JavaScript-->
     <script src="../../vendor/jquery/jquery.min.js"></script>
@@ -352,7 +403,12 @@ include '../../config/koneksi.php';
     <!-- Page level custom scripts -->
     <script src="../../js/demo/chart-area-demo.js"></script>
     <script src="../../js/demo/chart-pie-demo.js"></script>
-
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        new DataTable('#tabelAnggaran');
+    </script>
 </body>
 
 </html>

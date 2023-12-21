@@ -1,21 +1,37 @@
 <?php
-include('koneksi.php'); // Make sure to include your database connection file
+include('../config/koneksi.php');
+$koneksi = new DatabaseConnection();
+if (isset($_GET['id']) && isset($_GET['type'])) {
+    $id = $_GET['id'];
+    $type = $_GET['type'];
 
-if (isset($_POST['updatebarang'])) {
-    $id_barang = mysqli_real_escape_string($koneksi, $_POST['id_barang']);
-    $namaBarang = mysqli_real_escape_string($koneksi, $_POST['namaBarang']);
-    $deskripsi = mysqli_real_escape_string($koneksi, $_POST['deskripsi']);
-    $stok = mysqli_real_escape_string($koneksi, $_POST['stok']);
-    $foto = mysqli_real_escape_string($koneksi, $_POST['foto']);
-    $asal = mysqli_real_escape_string($koneksi, $_POST['asal']);
+    if ($type === 'barang') {
+        // Query untuk menghapus barang berdasarkan ID
+        $sql = "DELETE FROM barang WHERE idBarang='$id'";
+        $result = mysqli_query($koneksi->getConnection(), $sql);
 
-    // Query to update barang
-    $update_barang = mysqli_query($koneksi, "UPDATE barang SET namaBarang='$namaBarang', deskripsi='$deskripsi', stok='$stok', foto='$foto', asal='$asal' WHERE id_barang=$id_barang");
+        if ($result) {
+            echo "Data barang berhasil dihapus.";
+            header('Location: http://localhost:3000/admin/module/barang.php');
+            exit();
+        } else {
+            echo "Gagal menghapus data barang: " . mysqli_error($koneksi->getConnection());
+        }
+    } elseif ($type === 'anggaran') {
+        // Query untuk menghapus anggaran berdasarkan ID
+        $sql = "DELETE FROM anggaran WHERE idAnggaran='$id'";
+        $result = mysqli_query($koneksi->getConnection(), $sql);
 
-    if ($update_barang) {
-        echo "Data barang berhasil diupdate.";
+        if ($result) {
+            echo "Data anggaran berhasil dihapus.";
+            header('Location: ../admin/module/anggaran.php');
+            exit();
+        } else {
+            echo "Gagal menghapus data anggaran: " . mysqli_error($koneksi->getConnection());
+        }
     } else {
-        echo "Gagal update data barang: " . mysqli_error($koneksi);
+        echo "Tipe data tidak valid.";
     }
+} else {
+    echo "ID atau tipe data tidak valid.";
 }
-?>
