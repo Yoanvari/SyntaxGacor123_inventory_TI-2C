@@ -1,12 +1,6 @@
 <?php
 session_start();
 include '../config/koneksi.php';
-// untuk user
-if (!isset($_SESSION['logged_in_user']) || $_SESSION['logged_in_user'] !== true) {
-    // Jika tidak, redirect ke login.php
-    header('Location: ../login.php');
-    exit();
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -27,10 +21,118 @@ if (!isset($_SESSION['logged_in_user']) || $_SESSION['logged_in_user'] !== true)
         rel="stylesheet">
     <!-- Custom styles for this template-->
     <link href="../css/sb-admin-2.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+    <style>
+        #add-row {
+            padding-top: 0;
+            padding-bottom: 0;
+        }
 
+        .container-barang {
+            max-width: 1200px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            padding: 0 2rem;
+        }
+
+        .cart-barang {
+            position: fixed;
+            inset: 0 0 0 auto;
+            left: 100%;
+            max-width: 350px;
+            display: grid;
+            grid-template-rows: 70px 1fr 70px;
+            transition: 0.5s;
+        }
+
+        .active .cart-barang {
+            left: calc(100% - 350px);
+        }
+
+        .item-cart {
+            padding: 10px 0;
+            display: grid;
+            grid-template-columns: 70px 150px 100px 1fr;
+            gap: 10px;
+            text-align: center;
+            align-items: center;
+            color: #eee;
+        }
+
+        .quantity-item span {
+            display: inline-block;
+            width: 25px;
+            height: 25px;
+            background-color: #eee;
+            color: #555;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .quantity-item span:nth-child(2) {
+            background-color: transparent;
+            cursor: none;
+            color: #eee;
+        }
+
+        .listItem::-webkit-scrollbar {
+            width: 0;
+        }
+
+        .active .container-awal {
+            padding-right: 350px;
+            transition: 0.5s;
+        }
+
+        .container-awal {
+            transition: 0.5s;
+        }
+
+        .img-item {
+            height: 108px;
+        }
+
+        .icon-cart {
+            position: relative;
+        }
+
+        .icon-cart span {
+            display: flex;
+            width: 25px;
+            height: 25px;
+            background-color: red;
+            justify-content: center;
+            align-content: center;
+            color: #fff;
+            position: absolute;
+            border-radius: 50%;
+            top: 40%;
+            right: -10px;
+        }
+
+        .form-control:hover {
+            box-shadow: none;
+        }
+
+        .containerGrid {
+            display: grid;
+            grid-template-rows: 100px 1fr;
+        }
+
+        .card:hover {
+            transform: scale(1);
+        }
+
+        .cardItems {
+            display: grid;
+            grid-template-rows: 50px 25px 1fr 35px;
+        }
+    </style>
 </head>
 
-<body id="page-top">
+<body class="" id="page-top">
 
     <!-- Page Wrapper -->
     <div id="wrapper">
@@ -47,36 +149,14 @@ if (!isset($_SESSION['logged_in_user']) || $_SESSION['logged_in_user'] !== true)
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item - Dashboard -->
-            <li class="nav-item active">
-                <a class="nav-link" href="index.php">
+            <li class="nav-item">
+                <a class="nav-link menu" id="dashboard">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
 
             <!-- Divider -->
             <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Interface
-            </div>
-
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Data Master</span>
-                </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Components:</h6>
-                        <a class="collapse-item" href="utilities-animation.html">Tambah Barang</a>
-                        <a class="collapse-item" href="cards.html">Barang Masuk</a>
-                        <a class="collapse-item" href="cards.html">Barang Keluar</a>
-                    </div>
-                </div>
-            </li>
 
             <!-- Nav Item - Utilities Collapse Menu -->
             <!-- <li class="nav-item">
@@ -96,14 +176,6 @@ if (!isset($_SESSION['logged_in_user']) || $_SESSION['logged_in_user'] !== true)
                     </div>
                 </div>
             </li> -->
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Addons
-            </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
             <!-- <li class="nav-item">
@@ -128,18 +200,24 @@ if (!isset($_SESSION['logged_in_user']) || $_SESSION['logged_in_user'] !== true)
 
             <!-- Nav Item - Charts -->
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
+                <a class="nav-link menu" id="pinjamBarang">
                     <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Peminjaman</span></a>
+                    <span>Pinjam Barang</span></a>
             </li>
 
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="tables.html">
+                <a class="nav-link menu" id="list">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>Data Admin</span></a>
+                    <span>List Peminjaman</span></a>
             </li>
 
+            <!-- Nav Item - Tables -->
+            <li class="nav-item">
+                <a class="nav-link menu" id="history">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>History</span></a>
+            </li>
 
             <!-- Sidebar Toggler (Sidebar) -->
             <div class="text-center d-none d-md-inline">
@@ -213,16 +291,17 @@ if (!isset($_SESSION['logged_in_user']) || $_SESSION['logged_in_user'] !== true)
 
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="profile.php?id=<?=  $_SESSION['id']?>" id="userDropdown" role="button"
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">User Inventory</span>
-                                <img class="img-profile rounded-circle"
-                                    src="../img/undraw_profile.svg">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+                                    <?php echo isset($_SESSION['nama_lengkap']) ? $_SESSION['nama_lengkap'] : 'Nama Pengguna'; ?>
+                                </span>
+                                <img class="img-profile rounded-circle" src="../img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="profile.php?id=<?=  $_SESSION['id']?>">
+                                <a class="dropdown-item" href="../../admin/module/profile/profile.php">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
@@ -235,7 +314,8 @@ if (!isset($_SESSION['logged_in_user']) || $_SESSION['logged_in_user'] !== true)
                                     Activity Log
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="../logout.php" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" href="/logout.php" data-toggle="modal"
+                                    data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>
@@ -248,89 +328,27 @@ if (!isset($_SESSION['logged_in_user']) || $_SESSION['logged_in_user'] !== true)
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid">
-
-                    <!-- Page Heading -->
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-                    </div>
-
-                    <!-- Content Row -->
-                    <div class="row">
-
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-primary shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                Data Barang</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">nanti ada isinya disini</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Barang Masuk</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">sama nanti ada isinya disini</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Data Peminjaman</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">nanti ada isinya disini</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Pending Requests Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-warning shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                Data Operator</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">sama nanti juga ada isinya disini</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-comments fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <main id="pageContent">
+                    <?php
+                    // // Dashboard
+                    // if(@$_GET['view']=='')
+                    //     include 'dashboard.html';
+                    // elseif($_GET['view']=='dashboard')
+                    //     include 'dashboard.html';
+                    
+                    // // Tambah Barang
+                    // elseif($_GET['view']=='pinjamBarang')
+                    //     include 'data/pinjamBarang.php';
+                    
+                    // // Barang Masuk
+                    // elseif($_GET['view']=='list')
+                    //     include 'data/listPeminjaman.php';
+                    
+                    // // peminjaman
+                    // elseif($_GET['view']=='history')
+                    //     include 'data/history.php';
+                    ?>
+                </main>
                 <!-- /.container-fluid -->
             </div>
             <!-- End of Main Content -->
@@ -373,11 +391,118 @@ if (!isset($_SESSION['logged_in_user']) || $_SESSION['logged_in_user'] !== true)
     <!-- Custom scripts for all pages-->
     <script src="../js/sb-admin-2.min.js"></script>
     <!-- Page level plugins -->
-    <script src="../vendor/chart.js/Chart.min.js"></script>
+    <!-- <script src="../vendor/chart.js/Chart.min.js"></script> -->
+    <!--Datatables-->
+    <script src="../vendor/bootstrap/js/plugin/datatables/datatables.min.js"></script>
     <!-- Page level custom scripts -->
-    <script src="../js/demo/chart-area-demo.js"></script>
-    <script src="../js/demo/chart-pie-demo.js"></script>
+    <!-- <script src="../js/demo/chart-area-demo.js"></script>
+    <script src="../js/demo/chart-pie-demo.js"></script> -->
+    <!-- <script src="jquery-3.6.0.min.js"></script> -->
+    <script>
 
+        function countCart() {
+            $.ajax({
+                type: "GET",
+                url: "proses-cart.php",
+                dataType: "JSON",
+                success: function (response) {
+                    console.log(response);
+                    var count = response;
+                    $("#countCart").text(count);
+                }
+            });
+        };
+
+        function addCart($id) {
+            $.ajax({
+                type: "POST",
+                url: "proses-cart.php",
+                data: { "proses": "add", "id": $id },
+                dataType: "JSON",
+                success: function (response) {
+                    console.log(response);
+                    reloadContent();
+                }
+            });
+        }
+
+        function plusCart($id) {
+            $.ajax({
+                type: "POST",
+                url: "proses-cart.php",
+                data: { "proses": "plus", "id": $id },
+                dataType: "JSON",
+                success: function (response) {
+                    console.log(response);
+
+                    if (response.message === "Stok_Kurang") {
+                        alert('Stok Kurang Dari Jumlah Pinjam');
+                    } else if (response.message === "success") {
+                        reloadContent();
+                    }
+                }
+            });
+        }
+
+        function minusCart($id) {
+            $.ajax({
+                type: "POST",
+                url: "proses-cart.php",
+                data: { "proses": "minus", "id": $id },
+                dataType: "JSON",
+                success: function (response) {
+                    console.log(response);
+                    reloadContent();
+                }
+            });
+        }
+
+        function reloadContent() {
+            $("#pageContent").load("data/pinjamBarang.php");
+            setTimeout(function () {
+                countCart();
+            }, 100);
+        }
+
+        $(document).ready(function () {
+            let body = document.querySelector("body");
+
+            // Tambahkan event listener untuk membuka cart
+            $(document).on("click", ".icon-cart", function () {
+                body.classList.toggle('active');
+            });
+
+            // Tambahkan event listener untuk menutup cart
+            $(document).on("click", "#close", function () {
+                body.classList.toggle('active');
+            });
+
+            // Load content dan countCart
+            reloadContent();
+
+            $('.menu').click(function (e) {
+                e.preventDefault();
+
+                var menu = $(this).attr('id');
+
+                if (menu == "dashboard") {
+                    $('#pageContent').load('data/dashboard.php');
+                } else if (menu == "pinjamBarang") {
+                    reloadContent();
+                } else if (menu == "list") {
+                    $('#pageContent').load('data/listPeminjaman.php');
+                } else if (menu == "history") {
+                    $('#pageContent').load('data/history.php');
+                }
+
+            });
+        });
+
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        });
+    </script>
 </body>
 
 </html>

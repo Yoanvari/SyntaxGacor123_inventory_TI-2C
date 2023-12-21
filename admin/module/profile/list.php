@@ -1,15 +1,15 @@
 <?php
 session_start();
-include '../../config/koneksi.php';
-include '../../OOP/Admin.php';
-$koneksi = new DatabaseConnection();
-$Admin = new Admin($koneksi->getConnection());
+include '../../../config/koneksi.php';
+include '../../../OOP/user.php';
 // untuk admin
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     // Jika tidak, redirect ke login.php
     header('Location: ../login.php');
     exit();
 }
+$user = new User($koneksi);
+$allUsers = $user->getAllUsers();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,22 +24,12 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     <title>INVENTORY JTI</title>
 
     <!-- Custom fonts for this template-->
-    <link href="../../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
     <!-- Custom styles for this template-->
-    <link href="../../css/sb-admin-2.css" rel="stylesheet">
+    <link href="../../../css/sb-admin-2.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
-    <link href="../../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-    <!-- Sertakan CSS DataTables -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
-
-    <!-- Sertakan JS dan jQuery DataTables -->
-    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
-
-    <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
-
+    <link href="../../../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
 </head>
 
@@ -75,7 +65,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item active ">
+            <li class="nav-item">
                 <a class="nav-link collapsed" href="/admin/datamaster.php" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Data Master</span>
@@ -83,8 +73,8 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Components:</h6>
-                        <a class="collapse-item" href="anggaran.php">Anggaran</a>
-                        <a class="collapse-item" href="barang.php">Barang</a>
+                        <a class="collapse-item" href="../anggaran.php">Anggaran</a>
+                        <a class="collapse-item" href="../barang.php">Barang</a>
                     </div>
                 </div>
             </li>
@@ -99,21 +89,21 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 
             <!-- Nav Item - Charts -->
             <li class="nav-item">
-                <a class="nav-link" href="peminjaman.php">
+                <a class="nav-link" href="../../module/peminjaman.php">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Peminjaman</span></a>
             </li>
 
 
             <li class="nav-item">
-                <a class="nav-link" href="history.php">
+                <a class="nav-link" href="../../module/history.php">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>History Peminjaman</span></a>
             </li>
 
             <!-- Nav Item - Tables -->
-            <li class="nav-item">
-                <a class="nav-link" href="./list_user/list.php">
+            <li class="nav-item active">
+                <a class="nav-link" href="list.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>List User</span></a>
             </li>
@@ -143,7 +133,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                     </button>
 
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Data Anggaran</h1>
+                        <h1 class="h3 mb-0 text-gray-800">LIst User Inventory JTI</h1>
                     </div>
 
                     <!-- Topbar Navbar -->
@@ -175,42 +165,38 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">
                                     <?php echo isset($_SESSION['nama_lengkap']) ? $_SESSION['nama_lengkap'] : 'Nama Pengguna'; ?>
                                 </span>
-                                <img class="img-profile rounded-circle" src="../../img/undraw_profile.svg">
+                                <img class="img-profile rounded-circle" src="../../../img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="../module/profile/profile.php">
+                                <a class="dropdown-item" href="../profile/profile.php">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
-                                <!-- <a class="dropdown-item" href="#">
-                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Settings
-                                </a> -->
                                 <a class="dropdown-item" href="#">
                                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Activity Log
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="../../logout.php" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" href="/logout.php" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>
                             </div>
                         </li>
-
                     </ul>
 
                 </nav>
+
                 <div class="card-1 shadow mb-4">
                     <div class="card-1-body">
                         <div class="card-1-body d-flex align-items-center justify-content-between">
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
-                                Tambah Anggaran
+                                Tambah User
                             </button>
-                            <!-- <div class="mb-3">
+                            <div class="mb-3">
                                 <input type="text" id="search" class="form-control" onkeyup="searchTable()" placeholder="Cari..." style="max-width: 200px;">
-                            </div> -->
+                            </div>
                         </div>
                         <!-- The Modal -->
                         <div class="modal fade" id="myModal">
@@ -218,142 +204,188 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                                 <div class="modal-content">
                                     <!-- Modal Header -->
                                     <div class="modal-header">
-                                        <h4 class="modal-title text-primary">Tambah Anggaran</h4>
+                                        <h4 class="modal-title text-primary">Tambah User</h4>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                     </div>
                                     <!-- Modal Body -->
                                     <div class="modal-body">
-                                        <form action="tambah_anggaran.php" method="post" enctype="multipart/form-data">
+                                        <form action="../../../function/tambah.php" method="post">
                                             <div class="mb-3">
-                                                <label for="asal" class="form-label">Asal Anggaran</label>
-                                                <input type="text" name="asal" id="asal" class="form-control" required>
+                                                <label for="nama_lengkap" class="form-label">Nama Lengkap</label>
+                                                <input type="text" name="nama_lengkap" id="nama_lengkap" class="form-control" required>
                                             </div>
                                             <div class="mb-3">
-                                                <label for="tahun_penerimaan" class="form-label">Tahun
-                                                    Penerimaan</label>
-                                                <input type="date" name="tahun_penerimaan" id="tahun_penerimaan" class="form-control" required>
+                                                <label for="email" class="form-label">Email</label>
+                                                <input type="email" name="email" id="email" class="form-control" required>
                                             </div>
-                                            <button type="submit" class="btn btn-primary" name="addnewanggaran">Submit</button>
+                                            <div class="mb-3">
+                                                <label for="username" class="form-label">Username</label>
+                                                <input type="text" name="username" id="username" class="form-control" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="password" class="form-label">Password</label>
+                                                <input type="password" name="password" id="password" class="form-control" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="alamat" class="form-label">Alamat</label>
+                                                <input type="alamat" name="alamat" id="alamat" class="form-control" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="level" class="form-label">Level</label>
+                                                <select name="level" id="level" class="form-control" required>
+                                                    <option value="admin">Admin</option>
+                                                    <option value="user">User</option>
+                                                    <!-- Tambahkan opsi sesuai kebutuhan -->
+                                                </select>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="status" class="form-label">Status</label>
+                                                <select name="status" id="status" class="form-control" required>
+                                                    <option value="active">Active</option>
+                                                    <option value="inactive">Inactive</option>
+                                                    <!-- Tambahkan opsi sesuai kebutuhan -->
+                                                </select>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary" name="addnewuser">Submit</button>
                                         </form>
-                                        <?php
-                                        // if (isset($_POST['addnewanggaran'])) 
-
-
-                                        ?>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                         <div class="table-responsive">
-                            <table class="table table-bordered table-striped table-hover" id="tabelAnggaran" width="100%" cellspacing="0">
+                            <table class="table table-bordered table-striped table-hover " id="dataTable" width="100%" cellspacing="0">
                                 <thead class="thead-dark">
                                     <tr>
                                         <th>No</th>
-                                        <th>Asal</th>
-                                        <th>Tahun Penerimaan</th>
-                                        <th>Actions</th>
+                                        <th>Nama Lengkap</th>
+                                        <th>Email</th>
+                                        <th>Username</th>
+                                        <th>Alamat</th>
+                                        <th>Level</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $Admin->tabelAnggaran();
+                                    $result = mysqli_query($koneksi, "SELECT * FROM user");
+
+                                    if ($result) {
+                                        if (mysqli_num_rows($result) > 0) {
+                                            $no = 1;
+                                            while ($row = mysqli_fetch_assoc($result)) {
+                                                $statusColor = (strtolower($row['status']) == 'active') ? '#00FF00' : 'red';
+                                                echo "<tr>";
+                                                echo "<td>" . $no++ . "</td>";
+                                                echo "<td>" . $row['nama_lengkap'] . "</td>";
+                                                echo "<td>" . $row['email'] . "</td>";
+                                                echo "<td>" . $row['username'] . "</td>";
+                                                echo "<td>" . $row['alamat'] . "</td>";
+                                                echo "<td>" . $row['level'] . "</td>";
+                                                echo "<td style='color: $statusColor;'>" . $row['status'] . "</td>";
+                                                echo "<td>
+                                                        <button type='button' class='btn btn-info btn-sm' data-bs-toggle='modal' data-bs-target='#editModal" . $row['id'] . "'>Edit</button>
+                                                    </td>";
+                                                echo "</tr>";
+                                            }
+                                        } else {
+                                            echo "<tr><td colspan='7'>Tidak ada data</td></tr>";
+                                        }
+                                    } else {
+                                        echo "Error: " . mysqli_error($koneksi);
+                                    }
                                     ?>
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                </div>
-                <script>
-                    function searchTable() {
-                        const searchText = document.getElementById('search').value.toLowerCase();
-                        const table = document.getElementById('dataTable');
-                        const rows = table.getElementsByTagName('tr');
+                    <script>
+                        function searchTable() {
+                            const searchText = document.getElementById('search').value.toLowerCase();
+                            const table = document.getElementById('dataTable');
+                            const rows = table.getElementsByTagName('tr');
 
-                        for (let i = 0; i < rows.length; i++) {
-                            const cells = rows[i].getElementsByTagName('td');
-                            let found = false;
+                            for (let i = 0; i < rows.length; i++) {
+                                const cells = rows[i].getElementsByTagName('td');
+                                let found = false;
 
-                            for (let j = 0; j < cells.length; j++) {
-                                const cellText = cells[j].innerText.toLowerCase();
+                                for (let j = 0; j < cells.length; j++) {
+                                    const cellText = cells[j].innerText.toLowerCase();
 
-                                if (cellText.includes(searchText)) {
-                                    found = true;
-                                    break;
+                                    if (cellText.includes(searchText)) {
+                                        found = true;
+                                        break;
+                                    }
+                                }
+
+                                if (found) {
+                                    rows[i].style.display = '';
+                                } else {
+                                    rows[i].style.display = 'none';
                                 }
                             }
-
-                            if (found) {
-                                rows[i].style.display = '';
-                            } else {
-                                rows[i].style.display = 'none';
-                            }
                         }
-                    }
-                </script>
-                <!-- Modal Edit -->
+                    </script>
+
+                </div>
                 <?php
-                $result = mysqli_query($koneksi->getConnection(), "SELECT * FROM anggaran");
-                foreach ($result as $rowEdit) {
+                $result = mysqli_query($koneksi, "SELECT * FROM user");
+
+                foreach ($result as $row) {
                 ?>
-                    <div class="modal fade" id="editModal<?= $rowEdit['idAnggaran'] ?>">
+                    <!-- Edit Modal -->
+                    <div class="modal fade" id="editModal<?= $row['id'] ?>">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <!-- Modal Header -->
                                 <div class="modal-header">
-                                    <h4 class="modal-title text-primary">Edit Anggaran</h4>
+                                    <h4 class="modal-title text-primary">Edit User</h4>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                 </div>
                                 <!-- Modal Body -->
                                 <div class="modal-body">
-                                    <form action="../../function/update.php" method="post">
+                                    <form action="../../../function/update.php" method="post">
                                         <div class="mb-3">
-                                            <input type="hidden" name="idAnggaran" value="<?= $rowEdit['idAnggaran'] ?>">
-                                            <label for="asal" class="form-label">Asal Anggaran</label>
-                                            <input type="text" name="asal" id="asal" class="form-control" value="<?= $rowEdit['asal'] ?>" required>
+                                            <input type="hidden" name="id" value="<?= $row['id'] ?>">
+                                            <label for="nama_lengkap" class="form-label">Nama Lengkap</label>
+                                            <input type="text" name="nama_lengkap" id="nama_lengkap" class="form-control" value="<?= $row['nama_lengkap'] ?>" required>
                                         </div>
                                         <div class="mb-3">
-                                            <input type="hidden" name="idAnggaran" value="<?= $rowEdit['idAnggaran'] ?>">
-                                            <label for="tahun_penerimaan" class="form-label">Tahun Penerimaan</label>
-                                            <input type="date" name="tahun_penerimaan" id="tahun_penerimaan" class="form-control" value="<?= $rowEdit['tahun_penerimaan'] ?>" required>
+                                            <label for="email" class="form-label">Email</label>
+                                            <input type="email" name="email" id="email" class="form-control" value="<?= $row['email'] ?>" required>
                                         </div>
-                                        <button type="submit" class="btn btn-primary" name="editanggaran">Submit</button>
+                                        <div class="mb-3">
+                                            <label for="username" class="form-label">Username</label>
+                                            <input type="text" name="username" id="username" class="form-control" value="<?= $row['username'] ?>" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="alamat" class="form-label">Alamat</label>
+                                            <input type="text" name="alamat" id="alamat" class="form-control" value="<?= $row['alamat'] ?>" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="status" class="form-label">Status</label>
+                                            <select name="status" id="status" class="form-select" required>
+                                                <option value="active" <?= ($row['status'] == 'active') ? 'selected' : ''; ?>>
+                                                    Active</option>
+                                                <option value="inactive" <?= ($row['status'] == 'inactive') ? 'selected' : ''; ?>>Inactive</option>
+                                                <!-- Add other status options as needed -->
+                                            </select>
+                                        </div>
+                                        <!-- Add other fields as needed -->
+                                        <button type="submit" class="btn btn-primary" name="editUser">Submit</button>
                                     </form>
                                 </div>
                             </div>
                         </div>
                     </div>
+                <?php
+                }
+                ?>
 
 
-
-                    <!-- Delete Modal -->
-                    <div class="modal fade" id="deleteModal<?= $rowEdit['idAnggaran'] ?>">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <!-- Modal Header -->
-                                <div class="modal-header">
-                                    <h4 class="modal-title text-danger">Delete Anggaran</h4>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                </div>
-                                <!-- Modal Body -->
-                                <div class="modal-body">
-                                    <p>Are you sure you want to delete this anggaran?</p>
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                    <a href="../../function/delete.php?id=<?= $rowEdit['idAnggaran'] ?>&type=anggaran" class="btn btn-danger">delete</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                <?php } ?>
-
-                <script>
-                    function deleteAnggaran() {
-                        // Add your delete logic here
-                        alert("Delete function will be implemented here.");
-                    }
-                </script>
                 <!-- Begin Page Content -->
             </div>
+
             <!-- End of Main Content -->
         </div>
         <!-- End of Content Wrapper -->
@@ -379,37 +411,25 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="../../logout.php">Logout</a>
+                    <a class="btn btn-primary" href="../../../logout.php">Logout</a>
                 </div>
             </div>
         </div>
     </div>
-    <script>
-        $(document).ready(function() {
-            $('#dataTable').DataTable({
-                "pageLength": 10, // Menampilkan 10 entries per halaman
-            });
-        });
-    </script>
 
     <!-- Bootstrap core JavaScript-->
-    <script src="../../vendor/jquery/jquery.min.js"></script>
-    <script src="../../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../../../vendor/jquery/jquery.min.js"></script>
+    <script src="../../../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- Core plugin JavaScript-->
-    <script src="../../vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="../../../vendor/jquery-easing/jquery.easing.min.js"></script>
     <!-- Custom scripts for all pages-->
-    <script src="../../js/sb-admin-2.min.js"></script>
+    <script src="../../../js/sb-admin-2.min.js"></script>
     <!-- Page level plugins -->
-    <script src="../../vendor/chart.js/Chart.min.js"></script>
+    <script src="../../../vendor/chart.js/Chart.min.js"></script>
     <!-- Page level custom scripts -->
-    <script src="../../js/demo/chart-area-demo.js"></script>
-    <script src="../../js/demo/chart-pie-demo.js"></script>
-    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
-    <script>
-        new DataTable('#tabelAnggaran');
-    </script>
+    <script src="../../../js/demo/chart-area-demo.js"></script>
+    <script src="../../../js/demo/chart-pie-demo.js"></script>
+
 </body>
 
 </html>

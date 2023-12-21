@@ -3,12 +3,12 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 include "function/pesan_kilat.php";
-if(isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
+if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
     // Jika sudah login, redirect ke index.php
     header("location:admin/");
     exit();
 }
-if(isset($_SESSION['logged_in_user']) && $_SESSION['logged_in_user'] === true) {
+if (isset($_SESSION['logged_in_user']) && $_SESSION['logged_in_user'] === true) {
     // Jika sudah login, redirect ke index.php
     header("location:user/");
     exit();
@@ -16,6 +16,7 @@ if(isset($_SESSION['logged_in_user']) && $_SESSION['logged_in_user'] === true) {
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
     <meta charset="utf-8">
@@ -55,21 +56,26 @@ if(isset($_SESSION['logged_in_user']) && $_SESSION['logged_in_user'] === true) {
                                         <h1 class="h4 text-gray-900 mb-4">INVENTORY JTI !</h1>
                                     </div>
                                     <?php
-                                    if(isset($_SESSION['_flashdata'])){
-                                        foreach($_SESSION['_flashdata'] as $key => $val){
+                                    if (isset($_SESSION['_flashdata'])) {
+                                        foreach ($_SESSION['_flashdata'] as $key => $val) {
                                             echo get_flashdata($key);
                                         }
                                     }
                                     ?>
-                                    <form method="post" class="user" action="cek_login.php" >
-                                    <div class="form-group">
-                                        <input type="text" name="username" class="form-control form-control-user" id="exampleInputText" aria-describedby="textHelp" placeholder="Username" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="password" name="password" class="form-control form-control-user" id="exampleInputPassword" placeholder="Password" required>
-                                    </div>
-                                    <button type="submit" name="login" class="btn btn-primary btn-user btn-block">Login</button>
-                                </form>
+                                    <form method="post" class="user" action="cek_login.php" href>
+                                        <div class="form-group">
+                                            <input type="text" name="username" class="form-control form-control-user"
+                                                id="exampleInputText" aria-describedby="textHelp" placeholder="Username"
+                                                required>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="password" name="password"
+                                                class="form-control form-control-user" id="exampleInputPassword"
+                                                placeholder="Password" required>
+                                        </div>
+                                        <button type="submit" name="login"
+                                            class="btn btn-primary btn-user btn-block">Login</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>

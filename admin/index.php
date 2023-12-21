@@ -22,11 +22,13 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 
     <!-- Custom fonts for this template-->
     <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
     <!-- Custom styles for this template-->
     <link href="../css/sb-admin-2.css" rel="stylesheet">
+    <!-- Sertakan Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
 
 </head>
 
@@ -47,7 +49,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item - Dashboard -->
-            <li class="nav-item active">
+            <li class="nav-item active" id="dashboardItem">
                 <a class="nav-link" href="index.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
@@ -62,9 +64,8 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="datamaster.php" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
+            <li class="nav-item" id="dataMasterItem">
+                <a class="nav-link collapsed" href="datamaster.php" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Data Master</span>
                 </a>
@@ -78,25 +79,6 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                 </div>
             </li>
 
-            <!-- Nav Item - Utilities Collapse Menu -->
-            <!-- <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                    aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-fw fa-wrench"></i>
-                    <span>Utilities</span>
-                </a>
-                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Utilities:</h6>
-                        <a class="collapse-item" href="utilities-color.html">Colors</a>
-                        <a class="collapse-item" href="utilities-border.html">Borders</a>
-                        <a class="collapse-item" href="utilities-animation.html">Animations</a>
-                        <a class="collapse-item" href="utilities-other.html">Other</a>
-                    </div>
-                </div>
-            </li> -->
-
             <!-- Divider -->
             <hr class="sidebar-divider">
 
@@ -106,7 +88,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
             </div>
 
             <!-- Nav Item - Charts -->
-            <li class="nav-item">
+            <li class="nav-item" id="">
                 <a class="nav-link" href="./module/peminjaman.php">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Peminjaman</span></a>
@@ -114,7 +96,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 
 
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
+                <a class="nav-link" href="./module/history.php">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>History Peminjaman</span></a>
             </li>
@@ -132,13 +114,6 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>
             </div>
 
-            <!-- Sidebar Message -->
-            <!-- <div class="sidebar-card d-none d-lg-flex">
-                <img class="sidebar-card-illustration mb-2" src="img/undraw_rocket.svg" alt="...">
-                <p class="text-center mb-2"><strong>SB Admin Pro</strong> is packed with premium features, components, and more!</p>
-                <a class="btn btn-success btn-sm" href="https://startbootstrap.com/theme/sb-admin-pro">Upgrade to Pro!</a>
-            </div> -->
-
         </ul>
         <!-- End of Sidebar -->
 
@@ -147,7 +122,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 
             <!-- Main Content -->
             <div id="content">
-                
+
 
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
@@ -158,36 +133,23 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                     </button>
 
                     <!-- Topbar Search -->
-                    <form
-                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                        <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                                aria-label="Search" aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
-                                    <i class="fas fa-search fa-sm"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+                    </div>
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
                         <!-- Nav Item - Search Dropdown (Visible Only XS) -->
                         <li class="nav-item dropdown no-arrow d-sm-none">
-                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-search fa-fw"></i>
                             </a>
                             <!-- Dropdown - Messages -->
-                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-                                aria-labelledby="searchDropdown">
+                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in" aria-labelledby="searchDropdown">
                                 <form class="form-inline mr-auto w-100 navbar-search">
                                     <div class="input-group">
-                                        <input type="text" class="form-control bg-light border-0 small"
-                                            placeholder="Search for..." aria-label="Search"
-                                            aria-describedby="basic-addon2">
+                                        <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
                                         <div class="input-group-append">
                                             <button class="btn btn-primary" type="button">
                                                 <i class="fas fa-search fa-sm"></i>
@@ -200,22 +162,18 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Admin Inventory</span>
-                                <img class="img-profile rounded-circle"
-                                    src="../img/undraw_profile.svg">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+                                    <?php echo isset($_SESSION['nama_lengkap']) ? $_SESSION['nama_lengkap'] : 'Nama Pengguna'; ?>
+                                </span>
+                                <img class="img-profile rounded-circle" src="../img/undraw_profile.svg">
                             </a>
+
                             <!-- Dropdown - User Information -->
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="profil.php?id=<?=$_SESSION['id']?>">
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                                <a class="dropdown-item" href="./module/profile/profile.php">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Settings
                                 </a>
                                 <a class="dropdown-item" href="#">
                                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -238,85 +196,222 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <!-- <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-                    </div>
+                    </div> -->
 
                     <!-- Content Row -->
                     <div class="row">
-
-                        <!-- Earnings (Monthly) Card Example -->
+                        <!-- Data Anggaran Card -->
                         <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-primary shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                Data Barang</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">nanti ada isinya disini</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                            <a href="./module/anggaran.php" class="card-link text-decoration-none">
+                                <div class="card custom-card border-left-primary shadow h-100 py-2">
+                                    <div class="card-body text-center">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col">
+                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                    Data Anggaran</div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                                    <i class="fas fa-money-bill-wave fa-lg text-primary"></i>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
 
-                        <!-- Earnings (Monthly) Card Example -->
+                        <!-- Data Barang Card -->
                         <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Barang Masuk</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">sama nanti ada isinya disini</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                            <a href="./module/barang.php" class="card-link text-decoration-none">
+                                <div class="card custom-card border-left-success shadow h-100 py-2">
+                                    <div class="card-body text-center">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col">
+                                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                    Data Barang</div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                                    <i class="fas fa-box fa-lg text-success"></i>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
 
-                        <!-- Earnings (Monthly) Card Example -->
+                        <!-- Data Peminjaman Card -->
                         <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Data Peminjaman</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">nanti ada isinya disini</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                            <a href="./module/peminjaman.php" class="card-link text-decoration-none">
+                                <div class="card custom-card border-left-peminjaman shadow h-100 py-2">
+                                    <div class="card-body text-center">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col">
+                                                <div class="text-xs font-weight-bold text-peminjaman text-uppercase mb-1">
+                                                    Data Peminjaman</div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                                    <i class="fas fa-handshake fa-lg text-peminjaman"></i>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
 
-                        <!-- Pending Requests Card Example -->
+                        <!-- Data User Card -->
                         <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-warning shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                Data Operator</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">sama nanti juga ada isinya disini</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-comments fa-2x text-gray-300"></i>
+                            <a href="./module/list_user/list.php" class="card-link text-decoration-none">
+                                <div class="card custom-card border-left-warning shadow h-100 py-2">
+                                    <div class="card-body text-center">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col">
+                                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                                    Data User</div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                                    <i class="fas fa-users fa-lg text-warning"></i>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
+                        <style>
+                            /* Bar Chart Styles */
+                            #barChartContainer {
+                                max-width: 800px;
+                                margin: 20px auto;
+                                border: 1px solid #ddd;
+                                border-radius: 8px;
+                                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                            }
+
+                            #barChartCanvas {
+                                width: 100%;
+                                height: 400px;
+                            }
+
+                            /* Pie Chart Styles */
+                            #pieChartContainer {
+                                max-width: 400px;
+                                margin: 20px auto;
+                                border: 1px solid #ddd;
+                                border-radius: 8px;
+                                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                            }
+
+                            #pieChartCanvas {
+                                width: 100%;
+                                height: 300px;
+                            }
+                        </style>
+
+                        <!-- Bar Chart -->
+                        <div class="col-xl-6 col-md-12 mb-4" id="barChartContainer">
+                            <canvas id="barChartCanvas"></canvas>
+                            <?php
+                            // Fetch data for the bar chart
+                            $barChartResult = mysqli_query($koneksi, "SELECT asal, COUNT(*) as total FROM barang GROUP BY asal");
+                            $barChartLabels = [];
+                            $barChartValues = [];
+
+                            while ($row = mysqli_fetch_assoc($barChartResult)) {
+                                $barChartLabels[] = $row['asal'];
+                                $barChartValues[] = $row['total'];
+                            }
+                            ?>
+                            <script>
+                                // Bar chart
+                                var ctxB = document.getElementById("barChartCanvas").getContext('2d');
+                                var myBarChart = new Chart(ctxB, {
+                                    type: 'bar',
+                                    data: {
+                                        labels: <?php echo json_encode($barChartLabels); ?>,
+                                        datasets: [{
+                                            label: 'Total Barang',
+                                            data: <?php echo json_encode($barChartValues); ?>,
+                                            backgroundColor: [
+                                                'rgba(75, 192, 192, 0.7)',
+                                                'rgba(255, 99, 132, 0.7)',
+                                                'rgba(255, 206, 86, 0.7)',
+                                                'rgba(54, 162, 235, 0.7)',
+                                                'rgba(153, 102, 255, 0.7)',
+                                            ],
+                                            borderColor: [
+                                                'rgba(75, 192, 192, 1)',
+                                                'rgba(255, 99, 132, 1)',
+                                                'rgba(255, 206, 86, 1)',
+                                                'rgba(54, 162, 235, 1)',
+                                                'rgba(153, 102, 255, 1)',
+                                            ],
+                                            borderWidth: 1
+                                        }]
+                                    },
+                                    options: {
+                                        scales: {
+                                            y: {
+                                                beginAtZero: true
+                                            }
+                                        },
+                                        plugins: {
+                                            legend: {
+                                                display: false
+                                            }
+                                        }
+                                    }
+                                });
+                            </script>
+                        </div>
+
+                        <!-- Pie Chart -->
+                        <div id="pieChartContainer">
+                            <canvas id="pieChartCanvas"></canvas>
+                            <?php
+                            // Fetch data for the pie chart
+                            $statusCounts = [
+                                'active' => 0,
+                                'inactive' => 0,
+                            ];
+
+                            $query = mysqli_query($koneksi, 'SELECT status, COUNT(*) as total FROM user GROUP BY status');
+                            while ($row = mysqli_fetch_assoc($query)) {
+                                $statusCounts[$row['status']] = $row['total'];
+                            }
+                            ?>
+                            <script>
+                                // Pie chart
+                                var ctxP = document.getElementById("pieChartCanvas").getContext('2d');
+                                var myPieChart = new Chart(ctxP, {
+                                    type: 'pie',
+                                    data: {
+                                        labels: ['Active', 'Inactive'],
+                                        datasets: [{
+                                            data: [<?php echo $statusCounts['active']; ?>, <?php echo $statusCounts['inactive']; ?>],
+                                            backgroundColor: [
+                                                '#36A2EB',
+                                                '#FF6384',
+                                            ],
+                                            hoverBackgroundColor: [
+                                                '#36A2EB',
+                                                '#FF6384',
+                                            ]
+                                        }]
+                                    },
+                                    options: {
+                                        responsive: true
+                                    }
+                                });
+                            </script>
+                        </div>
+
+
+
+
+
+
                     </div>
+
                 </div>
                 <!-- /.container-fluid -->
             </div>
@@ -333,8 +428,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     </a>
 
     <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -352,6 +446,24 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
         </div>
     </div>
 
+
+    <script>
+        // Dapatkan semua elemen nav-item
+        const navItems = document.getElementsByClassName("nav-item");
+
+        // Tambahkan event listener klik pada setiap elemen nav-item
+        for (let i = 0; i < navItems.length; i++) {
+            navItems[i].addEventListener("click", function() {
+                // Hapus kelas "active" dari semua elemen nav-item
+                for (let j = 0; j < navItems.length; j++) {
+                    navItems[j].classList.remove("active");
+                }
+
+                // Tambahkan kelas "active" ke elemen nav-item yang diklik
+                this.classList.add("active");
+            });
+        }
+    </script>
     <!-- Bootstrap core JavaScript-->
     <script src="../vendor/jquery/jquery.min.js"></script>
     <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

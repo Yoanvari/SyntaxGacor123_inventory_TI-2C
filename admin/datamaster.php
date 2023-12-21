@@ -47,7 +47,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item - Dashboard -->
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="index.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
@@ -62,7 +62,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
+            <li class="nav-item active">
                 <a class="nav-link collapsed" href="datamaster.php" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
@@ -147,7 +147,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 
             <!-- Main Content -->
             <div id="content">
-                
+
 
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
@@ -202,27 +202,29 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Admin Inventory</span>
-                                <img class="img-profile rounded-circle"
-                                    src="../img/undraw_profile.svg">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+                                    <?php echo isset($_SESSION['nama_lengkap']) ? $_SESSION['nama_lengkap'] : 'Nama Pengguna'; ?>
+                                </span>
+                                <img class="img-profile rounded-circle" src="../img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="profil.php?id=<?=$_SESSION['id']?>">
+                                <a class="dropdown-item" href="./module/profile/profile.php">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
-                                <a class="dropdown-item" href="#">
+                                <!-- <a class="dropdown-item" href="#">
                                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Settings
-                                </a>
+                                </a> -->
                                 <a class="dropdown-item" href="#">
                                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Activity Log
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="../logout.php" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" href="../logout.php" data-toggle="modal"
+                                    data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>
@@ -253,7 +255,8 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                                 Data Barang</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">nanti ada isinya disini</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">nanti ada isinya disini
+                                            </div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -271,7 +274,8 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                 Barang Masuk</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">sama nanti ada isinya disini</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">sama nanti ada isinya
+                                                disini</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -289,7 +293,8 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                 Data Peminjaman</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">nanti ada isinya disini</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">nanti ada isinya disini
+                                            </div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -307,7 +312,8 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                                 Data Operator</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">sama nanti juga ada isinya disini</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">sama nanti juga ada
+                                                isinya disini</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-comments fa-2x text-gray-300"></i>

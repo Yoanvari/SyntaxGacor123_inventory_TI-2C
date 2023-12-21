@@ -1,6 +1,12 @@
 <?php
+session_start();
 include '../../config/koneksi.php';
-
+// untuk admin
+if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+    // Jika tidak, redirect ke login.php
+    header('Location: ../login.php');
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -13,16 +19,21 @@ include '../../config/koneksi.php';
     <meta name="description" content="">
     <meta name="author" content="">
     <title>INVENTORY JTI</title>
-
-    <!-- Custom fonts for this template-->
-    <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link href="../../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
     <!-- Custom styles for this template-->
     <link href="../../css/sb-admin-2.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
     <link href="../../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+
+    <!-- Tambahkan stylesheet lightbox2 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" integrity="sha512-sJQUOWoQhM7QKx9ImhAA8Q3HgjPfS6IK9zUnGThQQTj8tSCBD1VjMy7fmiA51Ph3eYjOui8a+3IViECitp4hA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Tambahkan script lightbox2 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js" integrity="sha512-j4L1+lXf5e+ipFMpD9U2E9zZ+ZmRQYPk+trPHb2s0pM9ln3udKtKVI2vl0rS38cCf+2u65buX4jG3e3Yp7EImA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+
 
 </head>
 
@@ -43,7 +54,7 @@ include '../../config/koneksi.php';
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item - Dashboard -->
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="../../index.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
@@ -58,7 +69,7 @@ include '../../config/koneksi.php';
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
+            <li class="nav-item active">
                 <a class="nav-link collapsed" href="/admin/datamaster.php" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Data Master</span>
@@ -155,19 +166,16 @@ include '../../config/koneksi.php';
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Admin Inventory</span>
-                                <img class="img-profile rounded-circle"
-                                    src="/img/undraw_profile.svg">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+                                    <?php echo isset($_SESSION['nama_lengkap']) ? $_SESSION['nama_lengkap'] : 'Nama Pengguna'; ?>
+                                </span>
+                                <img class="img-profile rounded-circle" src="../../img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="../module/profile/profile.php">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Settings
                                 </a>
                                 <a class="dropdown-item" href="#">
                                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -184,13 +192,14 @@ include '../../config/koneksi.php';
                     </ul>
 
                 </nav>
-                <!-- End of Topbar -->
-                <!-- DataTales Example -->
                 <div class="card-1 shadow mb-4">
                     <div class="card-1-body">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
-                            Tambah Barang
-                        </button>
+                        <div class="card-1-body d-flex align-items-center justify-content-between">
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
+                                Tambah Barang
+                            </button>
+
+                        </div>
                         <!-- The Modal -->
                         <div class="modal fade" id="myModal">
                             <div class="modal-dialog">
@@ -204,7 +213,11 @@ include '../../config/koneksi.php';
 
                                     <!-- Modal Body -->
                                     <div class="modal-body">
-                                        <form action="/function/tambah.php" method="post">
+                                        <form action="../../function/tambah.php" method="post" enctype="multipart/form-data">
+                                            <div class="mb-3">
+                                                <label for="kdBarang" class="form-label">Kode Barang</label>
+                                                <input type="text" name="kdBarang" id="kdbarang" class="form-control" required>
+                                            </div>
                                             <div class="mb-3">
                                                 <label for="namaBarang" class="form-label">Nama Barang</label>
                                                 <input type="text" name="namaBarang" id="namabarang" class="form-control" required>
@@ -218,51 +231,50 @@ include '../../config/koneksi.php';
                                                 <input type="number" name="stok" id="stok" class="form-control" required>
                                             </div>
                                             <div class="mb-3">
-                                                <label for="keterangan" class="form-label">Asal Barang</label>
+                                                <label for="asal" class="form-label">Asal Barang</label>
                                                 <select name="asal" id="asal" class="form-control">
                                                     <?php
                                                     $result_anggaran = mysqli_query($koneksi, "SELECT * FROM anggaran");
                                                     while ($row_anggaran = mysqli_fetch_assoc($result_anggaran)) {
-                                                        echo "<option value='" . $row_anggaran['asal'] . "'>" . $row_anggaran['asal'] . "</option>";
+                                                        echo "<option value='" . $row_anggaran['asal'] . "' data-tahun='" . $row_anggaran['tahun_penerimaan'] . "'>" . $row_anggaran['asal'] . "</option>";
                                                     }
                                                     ?>
                                                 </select>
                                             </div>
                                             <div class="mb-3">
-                                                <label for="foto" class="form-label">Foto Barang</label>
-                                                <input type="file" name="foto" id="foto" class="form-control" required>
+                                                <label for="tahun_penerimaan" class="form-label">Tahun
+                                                    Penerimaan</label>
+                                                <input type="date" name="tahun_penerimaan" id="tahun_penerimaan" class="form-control" readonly>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="foto" class="form-label">Foto Barang</label><br>
+                                                <input type="file" name="foto" id="foto" class="" required>
                                             </div>
                                             <button type="submit" class="btn btn-primary" name="addnewbarang">Submit</button>
                                         </form>
-                                        <!-- <div class="mt-3">
-                                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editModal">
-                                                Edit
-                                            </button>
-                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
-                                                Delete
-                                            </button>
-                                        </div> -->
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <div class="table-responsive">
-                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                <thead>
+                            <table class="table table-bordered table-striped table-hover" id="tabelBarang" width="100%" cellspacing="0">
+                                <thead class="thead-dark">
                                     <tr>
                                         <th>No</th>
+                                        <th>Kode</th>
                                         <th>Nama Barang</th>
                                         <th>Deskripsi</th>
                                         <th>Stok</th>
                                         <th>Asal</th>
+                                        <th>Tahun Penerimaan</th>
                                         <th>Foto</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
-                                        $result = mysqli_query($koneksi, "SELECT * FROM barang");
+                                    $result = mysqli_query($koneksi, "SELECT * FROM barang");
 
                                     if ($result) {
                                         if (mysqli_num_rows($result) > 0) {
@@ -270,37 +282,89 @@ include '../../config/koneksi.php';
                                             while ($row = mysqli_fetch_assoc($result)) {
                                                 echo "<tr>";
                                                 echo "<td>" . $no++ . "</td>";
+                                                echo "<td>" . $row['idBarang'] . "</td>";
                                                 echo "<td>" . $row['namaBarang'] . "</td>";
                                                 echo "<td>" . $row['deskripsi'] . "</td>";
                                                 echo "<td>" . $row['stok'] . "</td>";
                                                 echo "<td>" . $row['asal'] . "</td>";
-                                                echo "<td>" . $row['foto'] . "</td>";
-                                                // Add action buttons with icons
+                                                echo "<td>" . $row['tahun_penerimaan'] . "</td>";
+                                                $gambarPath = "../../img/" . $row['foto'];
+
+                                                // Tampilkan gambar dengan link ke detail modal
+                                                echo "<td><a href='$gambarPath' data-lightbox='barang' data-title='$row[namaBarang]'><img src='$gambarPath' alt='Gambar Barang' width='100px'></a></td>";
+
+                                                // Tombol Edit dan Delete
                                                 echo "<td>
-                                                <button type='button' class='btn btn-info btn-sm' data-bs-toggle='modal' data-bs-target='#editModal'>Edit</button>
-                                                <button type='button' class='btn btn-danger btn-sm' data-bs-toggle='modal' data-bs-target='#deleteModal'>Delete</button></td>";
-                                                echo "</tr>";
+                                                <button type='button' class='btn btn-info btn-sm' data-bs-toggle='modal' data-bs-target='#editModal" . $row['idBarang'] . "'>Edit</button>
+                                                <button type='button' class='btn btn-danger btn-sm' data-bs-toggle='modal' data-bs-target='#deleteModal" . $row['idBarang'] . "'>Delete</button>
+                                                </td>";
+
                                                 echo "</tr>";
                                             }
                                         } else {
-                                            echo "<tr><td colspan='4'>Tidak ada data</td></tr>";
+                                            echo "<tr><td colspan='7'>Tidak ada data</td></tr>";
                                         }
                                     } else {
                                         echo "Error: " . mysqli_error($koneksi);
                                     }
                                     ?>
-
                                 </tbody>
+
                             </table>
                         </div>
+
                     </div>
                 </div>
+                <script>
+                    function searchTable() {
+                        const searchText = document.getElementById('search').value.toLowerCase();
+                        const table = document.getElementById('dataTable');
+                        const rows = table.getElementsByTagName('tr');
+
+                        for (let i = 0; i < rows.length; i++) {
+                            const cells = rows[i].getElementsByTagName('td');
+                            let found = false;
+
+                            for (let j = 0; j < cells.length; j++) {
+                                const cellText = cells[j].innerText.toLowerCase();
+
+                                if (cellText.includes(searchText)) {
+                                    found = true;
+                                    break;
+                                }
+                            }
+
+                            if (found) {
+                                rows[i].style.display = '';
+                            } else {
+                                rows[i].style.display = 'none';
+                            }
+                        }
+                    }
+                </script>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        var popupLinks = document.querySelectorAll('.popup-link');
+
+                        popupLinks.forEach(function(link) {
+                            link.addEventListener('click', function(e) {
+                                e.preventDefault();
+
+                                var imageUrl = this.getAttribute('data-image');
+
+                                // Open a popup window with the image
+                                window.open(imageUrl, '_blank', 'width=800,height=600,resizable=yes');
+                            });
+                        });
+                    });
+                </script>
 
                 <!-- Modal Edit -->
                 <?php $result = mysqli_query($koneksi, "SELECT * FROM barang");
                 foreach ($result as $rowEdit) {
 
                 ?>
+                    <!-- Edit Modal -->
                     <div class="modal fade" id="editModal<?= $rowEdit['idBarang'] ?>">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -311,47 +375,87 @@ include '../../config/koneksi.php';
                                 </div>
                                 <!-- Modal Body -->
                                 <div class="modal-body">
-                                    <form action="/function/update.php" method="post">
-                                        //ini gatau kenapa masih ngebug
-                                        <input type="hidden" name="idBarang" id="editIdBarang" value="idBarang">
+                                    <form action="../../function/update.php" method="post" enctype="multipart/form-data">
                                         <div class="mb-3">
-                                            <label for="editNama" class="form-label">Nama Barang</label>
-                                            <input type="text" name="editNama" id="editNama" class="form-control" required>
+                                            <input type="hidden" name="idBarang" value="<?= $rowEdit['idBarang'] ?>">
+                                            <label for="namaBarang" class="form-label">Nama Barang</label>
+                                            <input type="text" name="namaBarang" id="namabarang" class="form-control" required value="<?= $rowEdit['namaBarang'] ?>">
                                         </div>
-                                        <button type="submit" class="btn btn-primary" name="editbarang">Simpan Perubahan</button>
+                                        <div class="mb-3">
+                                            <input type="hidden" name="idBarang" value="<?= $rowEdit['idBarang'] ?>">
+                                            <label for="kdBarang" class="form-label">Kode Barang</label>
+                                            <input type="text" name="kdBarang" id="kdbarang" class="form-control" required value="<?= $rowEdit['kdBarang'] ?>">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="deskripsi" class="form-label">Deskripsi Barang</label>
+                                            <input type="text" name="deskripsi" id="deskripsi" class="form-control" required value="<?= $rowEdit['deskripsi'] ?>">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="stok" class="form-label">Stok Barang</label>
+                                            <input type="number" name="stok" id="stok" class="form-control" required value="<?= $rowEdit['stok'] ?>">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="asal" class="form-label">Asal Barang</label>
+                                            <select name="asal" id="asalEdit" class="form-control">
+                                                <?php
+                                                $result_anggaran = mysqli_query($koneksi, "SELECT * FROM anggaran");
+                                                while ($row_anggaran = mysqli_fetch_assoc($result_anggaran)) {
+                                                    echo "<option value='" . $row_anggaran['asal'] . "' data-tahun='" . $row_anggaran['tahun_penerimaan'] . "'>" . $row_anggaran['asal'] . "</option>";
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="tahun_penerimaan" class="form-label">Tahun Penerimaan</label>
+                                            <input type="date" name="tahun_penerimaan" id="tahun_penerimaan" class="form-control" required>
+                                        </div>
+
+
+                                        <div class="mb-3">
+                                            <label for="foto" class="form-label">Foto Barang</label><br>
+                                            <input type="file" name="foto" id="foto" class="" required>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary" name="editbarang">Submit</button>
                                     </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Delete Modal -->
+                    <div class="modal fade" id="deleteModal<?= $rowEdit['idBarang'] ?>">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <!-- Modal Header -->
+                                <div class="modal-header">
+                                    <h4 class="modal-title text-danger">Delete Barang</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <!-- Modal Body -->
+                                <div class="modal-body">
+                                    <p>Are you sure you want to delete this barang?</p>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <a href="../../function/delete.php?id=<?= $rowEdit['idBarang'] ?>&type=barang" class="btn btn-danger">delete</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 <?php } ?>
 
-                <!-- Delete Modal -->
-                <div class="modal fade" id="deleteModal">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <!-- Modal Header -->
-                            <div class="modal-header">
-                                <h4 class="modal-title text-danger">Delete Barang</h4>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
-                            <!-- Modal Body -->
-                            <div class="modal-body">
-                                <p>Are you sure you want to delete this barang?</p>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" onclick="deleteBarang()">Delete</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                    <script>
-                        function deleteBarang() {
-                            // Add your delete logic here
-                            alert("Delete function will be implemented here.");
-                        }
-                    </script>
-
+                <script>
+                    document.getElementById('asal').addEventListener('input', function() {
+                        var selectedOption = this.options[this.selectedIndex];
+                        var tahunPenerimaan = selectedOption.getAttribute('data-tahun');
+                        document.getElementById('tahun_penerimaan').value = tahunPenerimaan;
+                    });
+                </script>
+                <script>
+                    document.getElementById('asalEdit').addEventListener('input', function() {
+                        var selectedOption = this.options[this.selectedIndex];
+                        var tahunPenerimaan = selectedOption.getAttribute('data-tahun');
+                        document.getElementById('tahun_penerimaan').value = tahunPenerimaan;
+                    });
+                </script>
 
                 <!-- Begin Page Content -->
             </div>
@@ -386,6 +490,8 @@ include '../../config/koneksi.php';
         </div>
     </div>
 
+
+
     <!-- Bootstrap core JavaScript-->
     <script src="../../vendor/jquery/jquery.min.js"></script>
     <script src="../../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -398,6 +504,12 @@ include '../../config/koneksi.php';
     <!-- Page level custom scripts -->
     <script src="../../js/demo/chart-area-demo.js"></script>
     <script src="../../js/demo/chart-pie-demo.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        new DataTable('#tabelBarang');
+    </script>
 
 </body>
 

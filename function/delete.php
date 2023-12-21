@@ -1,32 +1,37 @@
 <?php
-session_start();
+include('../config/koneksi.php');
+$koneksi = new DatabaseConnection();
+if (isset($_GET['id']) && isset($_GET['type'])) {
+    $id = $_GET['id'];
+    $type = $_GET['type'];
 
-// Include file koneksi.php dan fungsi-fungsi lainnya
-require '../config/koneksi.php';
-require '../function/pesan_kilat.php';
-require '../function/anti_injection.php';
+    if ($type === 'barang') {
+        // Query untuk menghapus barang berdasarkan ID
+        $sql = "DELETE FROM barang WHERE idBarang='$id'";
+        $result = mysqli_query($koneksi->getConnection(), $sql);
 
-// Mendapatkan nilai $id_barang dari formulir POST atau sumber data lainnya
-$id_barang = isset($_POST['id_barang']) ? $_POST['id_barang'] : null;
+        if ($result) {
+            echo "Data barang berhasil dihapus.";
+            header('Location: http://localhost:3000/admin/module/barang.php');
+            exit();
+        } else {
+            echo "Gagal menghapus data barang: " . mysqli_error($koneksi->getConnection());
+        }
+    } elseif ($type === 'anggaran') {
+        // Query untuk menghapus anggaran berdasarkan ID
+        $sql = "DELETE FROM anggaran WHERE idAnggaran='$id'";
+        $result = mysqli_query($koneksi->getConnection(), $sql);
 
-// Mengeksekusi fungsi deleteBarang dengan AJAX jika $id_barang sudah terdefinisi
-if (isset($id_barang) && isset($_POST['deleteBarang'])) {
-    deleteBarang($koneksi, $id_barang);
-}
-
-// Fungsi untuk menghapus data barang
-function deleteBarang($koneksi, $id_barang) {
-    // Menggunakan prepared statement untuk mencegah SQL injection
-    $stmt = mysqli_prepare($koneksi, "DELETE FROM barang WHERE idBarang = ?");
-    mysqli_stmt_bind_param($stmt, "i", $id_barang);
-
-    if (mysqli_stmt_execute($stmt)) {
-        echo "Data barang berhasil dihapus.";
+        if ($result) {
+            echo "Data anggaran berhasil dihapus.";
+            header('Location: ../admin/module/anggaran.php');
+            exit();
+        } else {
+            echo "Gagal menghapus data anggaran: " . mysqli_error($koneksi->getConnection());
+        }
     } else {
-        echo "Gagal menghapus data barang: " . mysqli_error($koneksi);
+        echo "Tipe data tidak valid.";
     }
-
-    // Menutup statement
-    mysqli_stmt_close($stmt);
+} else {
+    echo "ID atau tipe data tidak valid.";
 }
-?>
