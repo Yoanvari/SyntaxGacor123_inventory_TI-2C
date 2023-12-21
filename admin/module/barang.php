@@ -214,10 +214,12 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                                     <!-- Modal Body -->
                                     <div class="modal-body">
                                         <form action="../../function/tambah.php" method="post" enctype="multipart/form-data">
+
                                             <div class="mb-3">
                                                 <label for="kdBarang" class="form-label">Kode Barang</label>
                                                 <input type="text" name="kdBarang" id="kdbarang" class="form-control" required>
                                             </div>
+
                                             <div class="mb-3">
                                                 <label for="namaBarang" class="form-label">Nama Barang</label>
                                                 <input type="text" name="namaBarang" id="namabarang" class="form-control" required>
@@ -242,11 +244,13 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                                                 </select>
                                             </div>
                                             <div class="mb-3">
+
                                                 <label for="tahun_penerimaan" class="form-label">Tahun
                                                     Penerimaan</label>
                                                 <input type="date" name="tahun_penerimaan" id="tahun_penerimaan" class="form-control" readonly>
                                             </div>
                                             <div class="mb-3">
+
                                                 <label for="foto" class="form-label">Foto Barang</label><br>
                                                 <input type="file" name="foto" id="foto" class="" required>
                                             </div>
@@ -287,6 +291,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                                                 echo "<td>" . $row['deskripsi'] . "</td>";
                                                 echo "<td>" . $row['stok'] . "</td>";
                                                 echo "<td>" . $row['asal'] . "</td>";
+
                                                 echo "<td>" . $row['tahun_penerimaan'] . "</td>";
                                                 $gambarPath = "../../img/" . $row['foto'];
 
@@ -294,6 +299,10 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                                                 echo "<td><a href='$gambarPath' data-lightbox='barang' data-title='$row[namaBarang]'><img src='$gambarPath' alt='Gambar Barang' width='100px'></a></td>";
 
                                                 // Tombol Edit dan Delete
+                                                echo "<td><img src='../../img/" . $row['foto'] . "' alt='Gambar Barang'
+                                                width='100px'></td>";
+                                                // Add action buttons with icons
+
                                                 echo "<td>
                                                 <button type='button' class='btn btn-info btn-sm' data-bs-toggle='modal' data-bs-target='#editModal" . $row['idBarang'] . "'>Edit</button>
                                                 <button type='button' class='btn btn-danger btn-sm' data-bs-toggle='modal' data-bs-target='#deleteModal" . $row['idBarang'] . "'>Delete</button>
@@ -379,6 +388,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                                         <div class="mb-3">
                                             <input type="hidden" name="idBarang" value="<?= $rowEdit['idBarang'] ?>">
                                             <label for="namaBarang" class="form-label">Nama Barang</label>
+
                                             <input type="text" name="namaBarang" id="namabarang" class="form-control" required value="<?= $rowEdit['namaBarang'] ?>">
                                         </div>
                                         <div class="mb-3">
@@ -401,17 +411,38 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                                                 $result_anggaran = mysqli_query($koneksi, "SELECT * FROM anggaran");
                                                 while ($row_anggaran = mysqli_fetch_assoc($result_anggaran)) {
                                                     echo "<option value='" . $row_anggaran['asal'] . "' data-tahun='" . $row_anggaran['tahun_penerimaan'] . "'>" . $row_anggaran['asal'] . "</option>";
+=======
+                                            <input type="text" name="namaBarang" id="namabarang" class="form-control" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="deskripsi" class="form-label">Deskripsi Barang</label>
+                                            <input type="text" name="deskripsi" id="deskripsi" class="form-control" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="stok" class="form-label">Stok Barang</label>
+                                            <input type="number" name="stok" id="stok" class="form-control" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="keterangan" class="form-label">Asal Barang</label>
+                                            <select name="asal" id="asal" class="form-control">
+                                                <?php
+                                                $result_anggaran = mysqli_query($koneksi, "SELECT * FROM anggaran");
+                                                while ($row_anggaran = mysqli_fetch_assoc($result_anggaran)) {
+                                                    echo "<option value='" . $row_anggaran['asal'] . "'>" . $row_anggaran['asal'] . "</option>";
+
                                                 }
                                                 ?>
                                             </select>
                                         </div>
                                         <div class="mb-3">
+
                                             <label for="tahun_penerimaan" class="form-label">Tahun Penerimaan</label>
                                             <input type="date" name="tahun_penerimaan" id="tahun_penerimaan" class="form-control" required>
                                         </div>
 
 
                                         <div class="mb-3">
+
                                             <label for="foto" class="form-label">Foto Barang</label><br>
                                             <input type="file" name="foto" id="foto" class="" required>
                                         </div>

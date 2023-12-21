@@ -161,6 +161,7 @@ $allUsers = $user->getAllUsers();
 
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
+
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">
                                     <?php echo isset($_SESSION['nama_lengkap']) ? $_SESSION['nama_lengkap'] : 'Nama Pengguna'; ?>
@@ -170,6 +171,15 @@ $allUsers = $user->getAllUsers();
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                                 <a class="dropdown-item" href="../profile/profile.php">
+
+                            <a class="nav-link dropdown-toggle" href="/admin/datamaster.php" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Admin Inventory</span>
+                                <img class="img-profile rounded-circle" src="/img/undraw_profile.svg">
+                            </a>
+                            <!-- Dropdown - User Information -->
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                                <a class="dropdown-item" href="#">
+
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
@@ -190,6 +200,7 @@ $allUsers = $user->getAllUsers();
 
                 <div class="card-1 shadow mb-4">
                     <div class="card-1-body">
+
                         <div class="card-1-body d-flex align-items-center justify-content-between">
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
                                 Tambah User
@@ -198,6 +209,11 @@ $allUsers = $user->getAllUsers();
                                 <input type="text" id="search" class="form-control" onkeyup="searchTable()" placeholder="Cari..." style="max-width: 200px;">
                             </div>
                         </div>
+
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
+                            Tambah User
+                        </button>
+
                         <!-- The Modal -->
                         <div class="modal fade" id="myModal">
                             <div class="modal-dialog">
@@ -255,15 +271,27 @@ $allUsers = $user->getAllUsers();
                         <div class="table-responsive">
                             <table class="table table-bordered table-striped table-hover " id="dataTable" width="100%" cellspacing="0">
                                 <thead class="thead-dark">
+
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+
                                     <tr>
                                         <th>No</th>
                                         <th>Nama Lengkap</th>
                                         <th>Email</th>
                                         <th>Username</th>
+
                                         <th>Alamat</th>
                                         <th>Level</th>
                                         <th>Status</th>
                                         <th>Action</th>
+
+                                        <th>Password</th>
+                                        <th>Level</th>
+                                        <th>Status</th>
+
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -274,12 +302,15 @@ $allUsers = $user->getAllUsers();
                                         if (mysqli_num_rows($result) > 0) {
                                             $no = 1;
                                             while ($row = mysqli_fetch_assoc($result)) {
+
                                                 $statusColor = (strtolower($row['status']) == 'active') ? '#00FF00' : 'red';
+
                                                 echo "<tr>";
                                                 echo "<td>" . $no++ . "</td>";
                                                 echo "<td>" . $row['nama_lengkap'] . "</td>";
                                                 echo "<td>" . $row['email'] . "</td>";
                                                 echo "<td>" . $row['username'] . "</td>";
+
                                                 echo "<td>" . $row['alamat'] . "</td>";
                                                 echo "<td>" . $row['level'] . "</td>";
                                                 echo "<td style='color: $statusColor;'>" . $row['status'] . "</td>";
@@ -290,6 +321,15 @@ $allUsers = $user->getAllUsers();
                                             }
                                         } else {
                                             echo "<tr><td colspan='7'>Tidak ada data</td></tr>";
+
+                                                echo "<td>" . $row['password'] . "</td>";
+                                                echo "<td>" . $row['level'] . "</td>";
+                                                echo "<td style='color: $statusColor;'>" . $row['status'] . "</td>";
+                                                echo "</tr>";
+                                            }
+                                        } else {
+                                            echo "<tr><td colspan='4'>Tidak ada data</td></tr>";
+
                                         }
                                     } else {
                                         echo "Error: " . mysqli_error($koneksi);
@@ -297,6 +337,7 @@ $allUsers = $user->getAllUsers();
                                     ?>
                                 </tbody>
                             </table>
+
                         </div>
                     </div>
                     <script>
@@ -381,6 +422,10 @@ $allUsers = $user->getAllUsers();
                 <?php
                 }
                 ?>
+
+                        </div>
+                    </div>
+                </div>
 
 
                 <!-- Begin Page Content -->

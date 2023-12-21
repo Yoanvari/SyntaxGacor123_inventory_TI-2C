@@ -8,6 +8,7 @@ if (!empty($_SESSION['username'])) {
     require '../function/anti_injection.php';
 
     if (isset($_POST['addnewbarang'])) {
+
         $kdBarang = antiinjection($koneksi, $_POST['kdBarang']);
         $namaBarang = antiinjection($koneksi, $_POST['namaBarang']);
         $deskripsi = antiinjection($koneksi, $_POST['deskripsi']);
@@ -20,6 +21,17 @@ if (!empty($_SESSION['username'])) {
         $asal = antiinjection($koneksi, $_POST['asal']);
         $tahun_penerimaan = antiinjection($koneksi, $_POST['tahun_penerimaan']);
 
+        $gambar_barang = $_FILES['foto']['name'];
+        $targetDirImg = $_SERVER['DOCUMENT_ROOT'] . '/dasarweb/inventory_JTI/SyntaxGacor123_inventory_TI-2C/img/';
+        $tmpFile = $_FILES['foto']['tmp_name'];
+        move_uploaded_file($tmpFile, $targetDirImg . $gambar_barang);
+        $namaBarang = antiinjection($koneksi, $_POST['namaBarang']);
+        $deskripsi = antiinjection($koneksi, $_POST['deskripsi']);
+        $stok = antiinjection($koneksi, $_POST['stok']);
+        $foto = antiinjection($koneksi, $gambar_barang);
+        $asal = antiinjection($koneksi, $_POST['asal']); // Sesuaikan dengan nama elemen form
+
+
         // Check if kdBarang already exists
         $checkDuplicate = mysqli_query($koneksi, "SELECT * FROM barang WHERE kdBarang='$kdBarang'");
         if (mysqli_num_rows($checkDuplicate) > 0) {
@@ -29,8 +41,10 @@ if (!empty($_SESSION['username'])) {
             exit(); // Hentikan eksekusi script PHP
         }
 
+
         // Query SQL for barang
         $addtotable_barang = mysqli_query($koneksi, "INSERT INTO barang (kdBarang, namaBarang, deskripsi, stok, foto, asal, tahun_penerimaan) VALUES ('$kdBarang', '$namaBarang', '$deskripsi', '$stok', '$foto', '$asal', '$tahun_penerimaan')");
+
         if ($addtotable_barang) {
             pesan('success', "Data Barang Baru Ditambahkan.");
         } else {
@@ -49,6 +63,7 @@ if (!empty($_SESSION['username'])) {
 
         // Query SQL untuk anggaran
         $addtotable_anggaran = mysqli_query($koneksi, "INSERT INTO anggaran (asal, tahun_penerimaan) VALUES ('$asal', '$tahun_penerimaan')");
+
 
         if ($addtotable_anggaran) {
             pesan('success', "Data Anggaran Baru Ditambahkan.");

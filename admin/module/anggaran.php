@@ -223,7 +223,10 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                                     </div>
                                     <!-- Modal Body -->
                                     <div class="modal-body">
+
                                         <form action="tambah_anggaran.php" method="post" enctype="multipart/form-data">
+
+               
                                             <div class="mb-3">
                                                 <label for="asal" class="form-label">Asal Anggaran</label>
                                                 <input type="text" name="asal" id="asal" class="form-control" required>
@@ -235,11 +238,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                                             </div>
                                             <button type="submit" class="btn btn-primary" name="addnewanggaran">Submit</button>
                                         </form>
-                                        <?php
-                                        // if (isset($_POST['addnewanggaran'])) 
 
-
-                                        ?>
                                     </div>
                                 </div>
                             </div>
