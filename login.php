@@ -1,4 +1,9 @@
 <?php
+// include 'cek.php';
+// include 'config/koneksi.php';
+// $koneksi = new DatabaseConnection();
+// $loginController = new loginController($koneksi);
+// $loginController->login($_POST['username'], $_POST['password']);
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }

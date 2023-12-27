@@ -1,17 +1,19 @@
 <?php
 session_start();
-include "./config/koneksi.php";
+include "config/koneksi.php";
 include "function/pesan_kilat.php";
+
 $koneksi = new DatabaseConnection();
 $username = $_POST['username'];
-$password = md5($_POST['password']);
+$password = $_POST['password'];
+
 $filter = mysqli_query($koneksi->getConnection(), "SELECT * FROM user WHERE username='$username'");
 $cek = mysqli_num_rows($filter);
 $data = mysqli_fetch_array($filter);
 if ($cek > 0) {
     if ($data['status'] == 'active') {
         // Check if the password is correct
-        if ($password == $data['password']) {
+        if (password_verify($password, $data['password'])) {
             if ($data['level'] == 'admin') {
                 $_SESSION['logged_in'] = true;
                 $_SESSION['username'] = $data['username'];
@@ -29,7 +31,7 @@ if ($cek > 0) {
                     exit();
                 }
             } else if ($data['level'] == 'user') {
-                $_SESSION['logged_in_user'] = true;
+                $_SESSION['logged_in'] = true;
                 $_SESSION['username'] = $data['username'];
                 $_SESSION['level'] = 'user';
                 $_SESSION['id'] = $data['id'];
@@ -64,3 +66,7 @@ if ($cek > 0) {
 if (isset($alertMessage)) {
     echo "<script>alert('$alertMessage')</script>";
 }
+
+// Pastikan untuk menutup koneksi setelah digunakan
+$databaseConnection->closeConnection();
+?>
