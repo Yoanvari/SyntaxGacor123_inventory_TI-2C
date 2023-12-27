@@ -1,103 +1,49 @@
 <?php
-include '../config/koneksi.php';
+require_once '../OOP/Pengguna.php';
+require_once '../OOP/barang.php';
+require_once '../OOP/Cart.php';
+session_start();
+$idUser = $_SESSION['id'];
+require_once '../OOP/auth.php';
+$koneksi = new DatabaseConnection();
+$prosesCart = new Pengguna($koneksi);
+$barang = new barang($koneksi);
+$cart = new Cart();
 
-$request = $_SERVER['REQUEST_METHOD'];
-
-switch ($request) {
-    case 'GET':
-        $query = mysqli_query($koneksi,"SELECT * FROM cart")->num_rows;
-
-        echo json_encode($query);
-        break;
-    
-    case 'POST':
-
-        switch ($_POST['proses']) {
-            case 'add':
-                $id = $_POST['id'];
-
-                $query = mysqli_query($koneksi,"SELECT * FROM cart WHERE idBarang = '$id' ");
-                $checkCount = $query->num_rows;
-                while($row = mysqli_fetch_object($query)) {
-                    $qty = $row->qty;
-                }
-                if ($checkCount == 0) {
-
-                    $save = mysqli_query($koneksi,"INSERT INTO cart (idBarang,qty) VALUES ('$id','1') ");
-    
-                    if ($save) {
-                        echo json_encode(["message" => "success"]);
-                    } else {
-                        echo json_encode(["massage" => "failed"]);
-                    }
-                } else if ($checkCount > 0) {
-                    $qty += 1;
-
-                    $update = mysqli_query($koneksi,"UPDATE cart SET qty = '$qty' WHERE idBarang = '$id' ");
-    
-                    if ($update) {
-                        echo json_encode(["message" => "success"]);
-                    } else {
-                        echo json_encode(["massage" => "failed"]);
-                    }
-                }
-
-                break;
-            
-            case 'minus':
-                $id = $_POST['id'];
-
-                $query = mysqli_query($koneksi,"SELECT * FROM cart WHERE idBarang = '$id' ");
-                
-                while($row = mysqli_fetch_object($query)) {
-                    $qty = $row->qty;
-                }
-                if ($qty == 1) {
-
-                    $delete = mysqli_query($koneksi,"DELETE FROM cart WHERE idBarang = '$id' ");
-    
-                    if ($delete) {
-                        echo json_encode(["message" => "success"]);
-                    } else {
-                        echo json_encode(["massage" => "failed"]);
-                    }
-                } else if ($qty > 1) {
-                    $qty -= 1;
-
-                    $update = mysqli_query($koneksi,"UPDATE cart SET qty = '$qty' WHERE idBarang = '$id' ");
-    
-                    if ($update) {
-                        echo json_encode(["message" => "success"]);
-                    } else {
-                        echo json_encode(["massage" => "failed"]);
-                    }
-                }
-                break;
-            
-            case 'plus':
-                $id = $_POST['id'];
-                
-                $query = mysqli_query($koneksi,"SELECT * FROM cart c JOIN barang b ON c.idBarang = b.idBarang WHERE c.idBarang = '$id' ");
-
-                while($row = mysqli_fetch_object($query)) {
-                    $qty = $row->qty;
-                    $stok = $row->stok;
-                }
-                if ($qty == $stok ) {
-                    echo json_encode(["message" => "Stok_Kurang"]);
-                } else if ($stok > $qty) {
-                    $qty += 1;
-
-                    $update = mysqli_query($koneksi,"UPDATE cart SET qty = '$qty' WHERE idBarang = '$id' ");
-    
-                    if ($update) {
-                        echo json_encode(["message" => "success"]);
-                    } else {
-                        echo json_encode(["massage" => "failed"]);
-                    }
-                }
-                break;
-        }
-
-        break;
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    $prosesCart->countCart($idUser,$cart);
+} elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    switch ($_POST['proses']) {
+        case 'add':
+            $id = $_POST['id'];
+            $prosesCart->addCart($idUser,$id,$barang,$cart);
+            break;
+        case 'minus':
+            $id = $_POST['id'];
+            $prosesCart->minusCart($idUser,$id,$cart);
+            break;
+        case 'plus':
+            $id = $_POST['id'];
+            $prosesCart->plusCart($idUser,$id,$cart);
+            break;
+        case 'pinjam':
+            $prosesCart->pinjamCart($idUser,$cart,$barang);
+            break;
+        case 'hapusPinjam':
+            $id = $_POST['id'];
+            $prosesCart->hapusPinjam($id,$barang);
+            break;
+        case 'kembalikan':
+            $id = $_POST['id'];
+            $prosesCart->kembalikan($id,$barang);
+            break;
+        case 'approve':
+            $id = $_POST['id'];
+            $prosesCart->approve($id,$barang);
+            break;
+        case 'reject':
+            $id = $_POST['id'];
+            $prosesCart->reject($id,$barang);
+            break;
+    }
 }

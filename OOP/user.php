@@ -1,130 +1,56 @@
 <?php
-class User
+require_once 'Controller.php';
+class User extends Controller
 {
-    private $id;
-    private $nama_lengkap;
-    private $email;
-    private $username;
-    private $password;
-    private $jabatan;
-    private $level;
-    private $status;
+    public function __construct($koneksi)
+    {
+        parent::__construct($koneksi->getConnection());
+    }
+    public function read()
+    {
+        $result = $this->connection->query("select * from user");
+        $row = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        return $row;
+    }
+    public function create($data)
+    {
+        $password = password_hash($data['password'], PASSWORD_DEFAULT);
+        $result = $this->connection->query("INSERT INTO user (nama_lengkap, email, username, password, alamat, jabatan, jenis_kelamin, level, status) 
+                                  VALUES ('" . $data['nama_lengkap'] . "', '" . $data['email'] . "', '" . $data['username'] . "', '" . $password . "', '" . $data['alamat'] . "', '" . $data['jabatan'] . "', '" . $data['jenis_kelamin'] . "', '" . $data['level'] . "', '" . $data['status'] . "')");
+        return $result;
+    }
 
-    // Constructor to initialize the User object
-    // public function __construct($id, $nama_lengkap, $email, $username, $password, $jabatan, $level, $status)
-    // {
-    //     $this->id = $id;
-    //     $this->nama_lengkap = $nama_lengkap;
-    //     $this->email = $email;
-    //     $this->username = $username;
-    //     $this->password = $password;
-    //     $this->jabatan = $jabatan;
-    //     $this->level = $level;
-    //     $this->status = $status;
-    // }
+    public function update($data)
+    {
+        $result = $this->connection->query("UPDATE user SET 
+        nama_lengkap = '{$data['nama_lengkap']}', 
+        email = '{$data['email']}', 
+        username = '{$data['username']}', 
+        alamat = '{$data['alamat']}', 
+        jenis_kelamin = '{$data['jenis_kelamin']}', 
+        status = '{$data['status']}' 
+        WHERE id = {$data['id']}");
+        return $result;
+    }
+    public function isUserAdmin($userId)
+    {
+        $query = "SELECT level FROM user WHERE id = {$userId}";
+        $result = $this->connection->query($query);
 
-    // // Getters and Setters
-    // public function getId()
-    // {
-    //     return $this->id;
-    // }
+        if ($result && $result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return $row['level'] === 'admin';
+        }
 
-    // public function setId($id)
-    // {
-    //     $this->id = $id;
-    // }
+        return false;
+    }
 
-    // public function getNamaLengkap()
-    // {
-    //     return $this->nama_lengkap;
-    // }
+    public function delete($id)
+    {
+        $result = $this->connection->query("DELETE FROM user WHERE id = {$id}");
+        return $result;
+    }
 
-    // public function setNamaLengkap($nama_lengkap)
-    // {
-    //     $this->nama_lengkap = $nama_lengkap;
-    // }
-
-    // public function getEmail()
-    // {
-    //     return $this->email;
-    // }
-
-    // public function setEmail($email)
-    // {
-    //     $this->email = $email;
-    // }
-
-    // public function getUsername()
-    // {
-    //     return $this->username;
-    // }
-
-    // public function setUsername($username)
-    // {
-    //     $this->username = $username;
-    // }
-
-    // public function getPassword()
-    // {
-    //     return $this->password;
-    // }
-
-    // public function setPassword($password)
-    // {
-    //     $this->password = $password;
-    // }
-
-    // public function getJabatan()
-    // {
-    //     return $this->jabatan;
-    // }
-
-    // public function setJabatan($jabatan)
-    // {
-    //     $this->jabatan = $jabatan;
-    // }
-    // public function getLevel()
-    // {
-    //     return $this->level;
-    // }
-
-    // public function setLevel($level)
-    // {
-    //     $this->level = $level;
-    // }
-    // public function getStatus()
-    // {
-    //     return $this->status;
-    // }
-
-    // public function setStatus($status)
-    // {
-    //     $this->status = $status;
-    // }
-
-    // // Method to change the password
-    // public function gantiPassword()
-    // {
-    //     // Logic to change the password
-    // }
-
-    // // Method to change the profile
-    // public function gantiProfile()
-    // {
-    //     // Logic to change the profile
-    // }
-
-    // // Method to borrow an item
-    // public function pinjamBarang()
-    // {
-    //     // Logic to borrow an item
-    // }
-
-    // // Method to return an item
-    // public function kembalikan()
-    // {
-    //     // Logic to return an item
-    // }
 }
 
 ?>

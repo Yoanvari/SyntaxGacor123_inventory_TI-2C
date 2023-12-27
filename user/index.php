@@ -1,6 +1,5 @@
 <?php
 session_start();
-include '../config/koneksi.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -28,16 +27,16 @@ include '../config/koneksi.php';
             padding-bottom: 0;
         }
 
-        .container-barang {
+        .container-barang{
             max-width: 1200px;
             width: 100%;
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 3rem;
+            gap: 2rem;
             padding: 0 2rem;
         }
 
-        .cart-barang {
+        .cart-barang{
             position: fixed;
             inset: 0 0 0 auto;
             left: 100%;
@@ -51,9 +50,9 @@ include '../config/koneksi.php';
             left: calc(100% - 350px);
         }
 
-        .item-cart {
+        .item-cart{
             padding: 10px 0;
-            display: grid;
+            display: grid; 
             grid-template-columns: 70px 150px 100px 1fr;
             gap: 10px;
             text-align: center;
@@ -61,7 +60,7 @@ include '../config/koneksi.php';
             color: #eee;
         }
 
-        .quantity-item span {
+        .quantity-item span{
             display: inline-block;
             width: 25px;
             height: 25px;
@@ -71,34 +70,47 @@ include '../config/koneksi.php';
             cursor: pointer;
         }
 
-        .quantity-item span:nth-child(2) {
+        .quantity-item span:nth-child(2){
             background-color: transparent;
             cursor: none;
             color: #eee;
         }
 
-        .listItem::-webkit-scrollbar {
+        .listItem::-webkit-scrollbar{
             width: 0;
         }
 
-        .active .container-awal {
+        .active .container-awal{
             padding-right: 350px;
             transition: 0.5s;
         }
 
-        .container-awal {
+        .container-awal{
             transition: 0.5s;
         }
 
-        .img-item {
-            height: 108px;
+        #img-item{
+            width: 100px; 
+            height:100px;
+            border-radius: 6px;
+            overflow: hidden;
         }
 
-        .icon-cart {
+        #img-item img{
+            object-fit: cover;
+            width: 100%;
+            transition: transform .5s ease-in-out;
+        }
+
+        #img-item:hover img{
+            transform: scale(1.5) rotate(25deg);
+        }
+
+        .icon-cart{
             position: relative;
         }
 
-        .icon-cart span {
+        .icon-cart span{
             display: flex;
             width: 25px;
             height: 25px;
@@ -112,22 +124,22 @@ include '../config/koneksi.php';
             right: -10px;
         }
 
-        .form-control:hover {
+        .form-control:hover{
             box-shadow: none;
         }
 
-        .containerGrid {
+        .containerGrid{
             display: grid;
             grid-template-rows: 100px 1fr;
         }
 
-        .card:hover {
+        .card:hover{
             transform: scale(1);
         }
 
-        .cardItems {
+        .cardItems{
             display: grid;
-            grid-template-rows: 50px 25px 1fr 35px;
+            grid-template-rows: 100px 1fr 1fr 35px;
         }
     </style>
 </head>
@@ -149,54 +161,14 @@ include '../config/koneksi.php';
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item - Dashboard -->
-            <li class="nav-item">
+            <!-- <li class="nav-item">
                 <a class="nav-link menu" id="dashboard">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
-            </li>
+            </li> -->
 
             <!-- Divider -->
             <hr class="sidebar-divider">
-
-            <!-- Nav Item - Utilities Collapse Menu -->
-            <!-- <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                    aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-fw fa-wrench"></i>
-                    <span>Utilities</span>
-                </a>
-                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Utilities:</h6>
-                        <a class="collapse-item" href="utilities-color.html">Colors</a>
-                        <a class="collapse-item" href="utilities-border.html">Borders</a>
-                        <a class="collapse-item" href="utilities-animation.html">Animations</a>
-                        <a class="collapse-item" href="utilities-other.html">Other</a>
-                    </div>
-                </div>
-            </li> -->
-
-            <!-- Nav Item - Pages Collapse Menu -->
-            <!-- <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-                    aria-expanded="true" aria-controls="collapsePages">
-                    <i class="fas fa-fw fa-folder"></i>
-                    <span>Pages</span>
-                </a>
-                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Login Screens:</h6>
-                        <a class="collapse-item" href="login.html">Login</a>
-                        <a class="collapse-item" href="register.html">Register</a>
-                        <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-                        <div class="collapse-divider"></div>
-                        <h6 class="collapse-header">Other Pages:</h6>
-                        <a class="collapse-item" href="404.html">404 Page</a>
-                        <a class="collapse-item" href="blank.html">Blank Page</a>
-                    </div>
-                </div>
-            </li> -->
 
             <!-- Nav Item - Charts -->
             <li class="nav-item">
@@ -224,18 +196,11 @@ include '../config/koneksi.php';
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>
             </div>
 
-            <!-- Sidebar Message -->
-            <!-- <div class="sidebar-card d-none d-lg-flex">
-                <img class="sidebar-card-illustration mb-2" src="img/undraw_rocket.svg" alt="...">
-                <p class="text-center mb-2"><strong>SB Admin Pro</strong> is packed with premium features, components, and more!</p>
-                <a class="btn btn-success btn-sm" href="https://startbootstrap.com/theme/sb-admin-pro">Upgrade to Pro!</a>
-            </div> -->
-
         </ul>
         <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content-wrapper" class="d-flex flex-column" style="min-width:650px; overflow: auto;">
 
             <!-- Main Content -->
             <div id="content">
@@ -296,26 +261,22 @@ include '../config/koneksi.php';
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">
                                     <?php echo isset($_SESSION['nama_lengkap']) ? $_SESSION['nama_lengkap'] : 'Nama Pengguna'; ?>
                                 </span>
-                                <img class="img-profile rounded-circle" src="../img/undraw_profile.svg">
+                                <img class="img-profile rounded-circle"
+                                    src="../img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="../../admin/module/profile/profile.php">
+                                <a class="dropdown-item" href="data/profile/profile.php">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Settings
                                 </a>
                                 <a class="dropdown-item" href="#">
                                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Activity Log
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="/logout.php" data-toggle="modal"
-                                    data-target="#logoutModal">
+                                <a class="dropdown-item" href="/login.php" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>
@@ -329,25 +290,7 @@ include '../config/koneksi.php';
 
                 <!-- Begin Page Content -->
                 <main id="pageContent">
-                    <?php
-                    // // Dashboard
-                    // if(@$_GET['view']=='')
-                    //     include 'dashboard.html';
-                    // elseif($_GET['view']=='dashboard')
-                    //     include 'dashboard.html';
-                    
-                    // // Tambah Barang
-                    // elseif($_GET['view']=='pinjamBarang')
-                    //     include 'data/pinjamBarang.php';
-                    
-                    // // Barang Masuk
-                    // elseif($_GET['view']=='list')
-                    //     include 'data/listPeminjaman.php';
-                    
-                    // // peminjaman
-                    // elseif($_GET['view']=='history')
-                    //     include 'data/history.php';
-                    ?>
+                
                 </main>
                 <!-- /.container-fluid -->
             </div>
@@ -364,8 +307,7 @@ include '../config/koneksi.php';
     </a>
 
     <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -382,6 +324,26 @@ include '../config/koneksi.php';
             </div>
         </div>
     </div>
+    <!-- Modal Notifikasi -->
+    <div class="modal fade" id="notifModal" tabindex="-1" role="dialog" aria-labelledby="notifModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="notifModalLabel">Notifikasi</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Konten notifikasi akan ditampilkan di sini -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Bootstrap core JavaScript-->
     <script src="../vendor/jquery/jquery.min.js"></script>
@@ -393,13 +355,75 @@ include '../config/koneksi.php';
     <!-- Page level plugins -->
     <!-- <script src="../vendor/chart.js/Chart.min.js"></script> -->
     <!--Datatables-->
-    <script src="../vendor/bootstrap/js/plugin/datatables/datatables.min.js"></script>
+    <!-- <script src="../vendor/bootstrap/js/plugin/datatables/datatables.min.js"></script> -->
     <!-- Page level custom scripts -->
     <!-- <script src="../js/demo/chart-area-demo.js"></script>
     <script src="../js/demo/chart-pie-demo.js"></script> -->
     <!-- <script src="jquery-3.6.0.min.js"></script> -->
     <script>
+        function hapusPinjam($id) {
+            $.ajax({
+                type: "POST",
+                url: "proses-cart.php",
+                data: {"proses" : "hapusPinjam","id" : $id},
+                dataType: "JSON",
+                success: function (response) {
+                    console.log(response);
+                    if (response.message === "success") {
+                        showNotificationModal("Pembatalan Berhasil", "Pinjaman telah dibatalkan.");
 
+                        setTimeout(function() {
+                            $("#pageContent").load("data/listPeminjaman.php");
+                        }, 500);
+                    }
+                }
+            });
+        }
+
+        function kembalikan($id) {
+            $.ajax({
+                type: "POST",
+                url: "proses-cart.php",
+                data: {"proses" : "kembalikan","id" : $id},
+                dataType: "JSON",
+                success: function (response) {
+                    console.log(response);
+                    if (response.message === "success") {
+                        showNotificationModal("Pengembalian Berhasil", "Barang berhasil dikembalikan.");
+
+                        setTimeout(function() {
+                            $("#pageContent").load("data/history.php");
+                        }, 500);
+                    }
+                }
+            });
+        }
+
+        function pinjam() {
+            var tglMulai = document.getElementsByName("tgl_mulai")[0].value;
+            var tglSelesai = document.getElementsByName("tgl_selesai")[0].value;
+            if (tglMulai > tglSelesai) {
+                alert("Tanggal Mulai tidak boleh lebih besar dari Tanggal Selesai");
+                return;
+            }
+            $.ajax({
+                type: "POST",
+                url: "proses-cart.php",
+                data: {"proses" : "pinjam", "tgl_mulai" : tglMulai, "tgl_selesai" : tglSelesai},
+                dataType: "JSON",
+                success: function (response) {
+                    console.log(response);
+                    if (response.message === "success") {                        
+                        showNotificationModal("Peminjaman Berhasil", "Tunggu persetujuan dari admin.");
+
+                        setTimeout(function() {
+                            $("#pageContent").load("data/listPeminjaman.php");
+                        }, 500);
+                    }
+                }
+            });
+        }
+        
         function countCart() {
             $.ajax({
                 type: "GET",
@@ -417,11 +441,17 @@ include '../config/koneksi.php';
             $.ajax({
                 type: "POST",
                 url: "proses-cart.php",
-                data: { "proses": "add", "id": $id },
+                data: {"proses" : "add","id" : $id},
                 dataType: "JSON",
                 success: function (response) {
                     console.log(response);
-                    reloadContent();
+                    if (response.message === "rusak") {
+                        alert('Barang tidak dapat dipinjam karena rusak');
+                    } else if (response.message === "success") {
+                        reloadContent();
+                    } else if (response.message === "Stok_Kurang") {
+                        alert('Stok Kurang Dari Jumlah Pinjam');
+                    }
                 }
             });
         }
@@ -430,7 +460,7 @@ include '../config/koneksi.php';
             $.ajax({
                 type: "POST",
                 url: "proses-cart.php",
-                data: { "proses": "plus", "id": $id },
+                data: {"proses" : "plus","id" : $id},
                 dataType: "JSON",
                 success: function (response) {
                     console.log(response);
@@ -448,7 +478,7 @@ include '../config/koneksi.php';
             $.ajax({
                 type: "POST",
                 url: "proses-cart.php",
-                data: { "proses": "minus", "id": $id },
+                data: {"proses" : "minus","id" : $id},
                 dataType: "JSON",
                 success: function (response) {
                     console.log(response);
@@ -459,7 +489,7 @@ include '../config/koneksi.php';
 
         function reloadContent() {
             $("#pageContent").load("data/pinjamBarang.php");
-            setTimeout(function () {
+            setTimeout(function() {
                 countCart();
             }, 100);
         }
@@ -480,29 +510,38 @@ include '../config/koneksi.php';
             // Load content dan countCart
             reloadContent();
 
-            $('.menu').click(function (e) {
+            $('.menu').click(function (e) { 
                 e.preventDefault();
 
                 var menu = $(this).attr('id');
 
-                if (menu == "dashboard") {
+                if(menu == "dashboard") {
                     $('#pageContent').load('data/dashboard.php');
-                } else if (menu == "pinjamBarang") {
+                } else if(menu == "pinjamBarang") {
                     reloadContent();
-                } else if (menu == "list") {
+                } else if(menu == "list") {
                     $('#pageContent').load('data/listPeminjaman.php');
-                } else if (menu == "history") {
+                } else if(menu == "history") {
                     $('#pageContent').load('data/history.php');
                 }
-
+                
             });
+
         });
 
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl)
-        });
-    </script>
+        function showNotificationModal(title, message) {
+            // Mengganti konten modal dengan pesan notifikasi
+            $("#notifModalLabel").text(title);
+            $(".modal-body").html("<p>" + message + "</p>");
+
+            // Menampilkan modal
+            $("#notifModal").modal("show");
+        }
+
+        // var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        // var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        // return new bootstrap.Tooltip(tooltipTriggerEl)
+        // });
+	</script>
 </body>
-
 </html>
