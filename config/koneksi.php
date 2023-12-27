@@ -5,7 +5,7 @@ class DatabaseConnection
     private $host = "localhost";
     private $username = "root";
     private $password = "";
-    private $database = "inventaris";
+    private $database = "tes";
 
     private $koneksi;
 
@@ -18,9 +18,9 @@ class DatabaseConnection
     {
         $conn = new mysqli($this->host, $this->username, $this->password, $this->database);
 
-        // if ($this->koneksi->connect_error) {
-        //     die("Koneksi database gagal: " . $this->koneksi->connect_error);
-        // }
+        if ($conn->connect_errno) {
+            die("Koneksi database gagal: " . $this->koneksi->connect_error);
+        }
         $this->koneksi = $conn;
     }
 

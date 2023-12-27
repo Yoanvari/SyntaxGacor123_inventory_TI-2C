@@ -1,6 +1,8 @@
 <?php
 session_start();
-include '../../config/koneksi.php';
+include '../../OOP/Admin.php';
+$Admin = new Admin();
+$Admin->tampilkanPesan();
 // untuk admin
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     // Jika tidak, redirect ke login.php
@@ -21,17 +23,23 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     <title>INVENTORY JTI</title>
     <!-- Bootstrap CSS -->
     <link href="../../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
     <!-- Custom styles for this template-->
     <link href="../../css/sb-admin-2.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
     <link href="../../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
     <!-- Tambahkan stylesheet lightbox2 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" integrity="sha512-sJQUOWoQhM7QKx9ImhAA8Q3HgjPfS6IK9zUnGThQQTj8tSCBD1VjMy7fmiA51Ph3eYjOui8a+3IViECitp4hA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css"
+        integrity="sha512-sJQUOWoQhM7QKx9ImhAA8Q3HgjPfS6IK9zUnGThQQTj8tSCBD1VjMy7fmiA51Ph3eYjOui8a+3IViECitp4hA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Tambahkan script lightbox2 -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js" integrity="sha512-j4L1+lXf5e+ipFMpD9U2E9zZ+ZmRQYPk+trPHb2s0pM9ln3udKtKVI2vl0rS38cCf+2u65buX4jG3e3Yp7EImA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"
+        integrity="sha512-j4L1+lXf5e+ipFMpD9U2E9zZ+ZmRQYPk+trPHb2s0pM9ln3udKtKVI2vl0rS38cCf+2u65buX4jG3e3Yp7EImA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
 
 
@@ -70,7 +78,8 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item active">
-                <a class="nav-link collapsed" href="/admin/datamaster.php" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                <a class="nav-link collapsed" href="/admin/datamaster.php" data-toggle="collapse"
+                    data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Data Master</span>
                 </a>
@@ -100,7 +109,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 
 
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
+                <a class="nav-link" href="history.php">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>History Peminjaman</span></a>
             </li>
@@ -145,14 +154,18 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 
                         <!-- Nav Item - Search Dropdown (Visible Only XS) -->
                         <li class="nav-item dropdown no-arrow d-sm-none">
-                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-search fa-fw"></i>
                             </a>
                             <!-- Dropdown - Messages -->
-                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in" aria-labelledby="searchDropdown">
+                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+                                aria-labelledby="searchDropdown">
                                 <form class="form-inline mr-auto w-100 navbar-search">
                                     <div class="input-group">
-                                        <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+                                        <input type="text" class="form-control bg-light border-0 small"
+                                            placeholder="Search for..." aria-label="Search"
+                                            aria-describedby="basic-addon2">
                                         <div class="input-group-append">
                                             <button class="btn btn-primary" type="button">
                                                 <i class="fas fa-search fa-sm"></i>
@@ -165,14 +178,16 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">
                                     <?php echo isset($_SESSION['nama_lengkap']) ? $_SESSION['nama_lengkap'] : 'Nama Pengguna'; ?>
                                 </span>
                                 <img class="img-profile rounded-circle" src="../../img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="userDropdown">
                                 <a class="dropdown-item" href="../module/profile/profile.php">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
@@ -182,7 +197,8 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                                     Activity Log
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="/logout.php" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" href="/logout.php" data-toggle="modal"
+                                    data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>
@@ -195,7 +211,8 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                 <div class="card-1 shadow mb-4">
                     <div class="card-1-body">
                         <div class="card-1-body d-flex align-items-center justify-content-between">
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#myModal">
                                 Tambah Barang
                             </button>
 
@@ -213,48 +230,65 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 
                                     <!-- Modal Body -->
                                     <div class="modal-body">
-                                        <form action="../../function/tambah.php" method="post" enctype="multipart/form-data">
 
+                                        <form action="../../function/tambah.php?jenis=tambahBarang" method="post"
+                                            enctype="multipart/form-data">
                                             <div class="mb-3">
-                                                <label for="kdBarang" class="form-label">Kode Barang</label>
-                                                <input type="text" name="kdBarang" id="kdbarang" class="form-control" required>
+                                                <label for="kd_Barang" class="form-label">Kode Barang</label>
+                                                <input type="text" name="kd_Barang" id="kd_barang" class="form-control"
+                                                    required>
                                             </div>
-
                                             <div class="mb-3">
                                                 <label for="namaBarang" class="form-label">Nama Barang</label>
-                                                <input type="text" name="namaBarang" id="namabarang" class="form-control" required>
+                                                <input type="text" name="namaBarang" id="namabarang"
+                                                    class="form-control" required>
                                             </div>
                                             <div class="mb-3">
                                                 <label for="deskripsi" class="form-label">Deskripsi Barang</label>
-                                                <input type="text" name="deskripsi" id="deskripsi" class="form-control" required>
+                                                <select name="deskripsi" id="deskripsi" class="form-control" required>
+                                                    <option value="bagus">Bagus</option>
+                                                    <option value="rusak">Rusak</option>
+                                                </select>
                                             </div>
                                             <div class="mb-3">
                                                 <label for="stok" class="form-label">Stok Barang</label>
-                                                <input type="number" name="stok" id="stok" class="form-control" required>
+                                                <input type="number" name="stok" id="stok" class="form-control"
+                                                    required>
                                             </div>
                                             <div class="mb-3">
                                                 <label for="asal" class="form-label">Asal Barang</label>
                                                 <select name="asal" id="asal" class="form-control">
                                                     <?php
-                                                    $result_anggaran = mysqli_query($koneksi, "SELECT * FROM anggaran");
-                                                    while ($row_anggaran = mysqli_fetch_assoc($result_anggaran)) {
-                                                        echo "<option value='" . $row_anggaran['asal'] . "' data-tahun='" . $row_anggaran['tahun_penerimaan'] . "'>" . $row_anggaran['asal'] . "</option>";
-                                                    }
+                                                    $Admin->asalBarang();
                                                     ?>
                                                 </select>
                                             </div>
-                                            <div class="mb-3">
-
-                                                <label for="tahun_penerimaan" class="form-label">Tahun
+                                            <!-- <div class="mb-3">
+                                                <label for="tahun_pengadaan" class="form-label">Tahun
                                                     Penerimaan</label>
-                                                <input type="date" name="tahun_penerimaan" id="tahun_penerimaan" class="form-control" readonly>
+                                                <input type="date" name="tahun_pengadaan" id="tahun_pengadaan"
+                                                    class="form-control" value="">
                                             </div>
+                                            <script>
+                                                function coba() {
+                                                    var selected = document.getElementById('asal');
+                                                    var selected1 = document.getElementById('asall');
+                                                    const coba = selected.value.split(', ');
+                                                    selected1.value = coba[0];
+                                                    var tahun = document.getElementById('tahun_penerimaan');
+                                                    tahun.value = coba[1];
+                                                    const $options = Array.from(selected.options);
+                                                    const optionToSelect = $options.find(item => item.text === coba[0]);
+                                                    optionToSelect.selected = true;
+                                                    console.log(selected1.value);
+                                                }
+                                            </script> -->
                                             <div class="mb-3">
-
                                                 <label for="foto" class="form-label">Foto Barang</label><br>
                                                 <input type="file" name="foto" id="foto" class="" required>
                                             </div>
-                                            <button type="submit" class="btn btn-primary" name="addnewbarang">Submit</button>
+                                            <button type="submit" class="btn btn-primary"
+                                                name="addnewbarang">Submit</button>
                                         </form>
                                     </div>
                                 </div>
@@ -262,7 +296,8 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                         </div>
 
                         <div class="table-responsive">
-                            <table class="table table-bordered table-striped table-hover" id="tabelBarang" width="100%" cellspacing="0">
+                            <table class="table table-bordered table-striped table-hover" id="tabelBarang" width="100%"
+                                cellspacing="0">
                                 <thead class="thead-dark">
                                     <tr>
                                         <th>No</th>
@@ -271,51 +306,14 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                                         <th>Deskripsi</th>
                                         <th>Stok</th>
                                         <th>Asal</th>
-                                        <th>Tahun Penerimaan</th>
+                                        <!-- <th>Tahun Penerimaan</th> -->
                                         <th>Foto</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $result = mysqli_query($koneksi, "SELECT * FROM barang");
-
-                                    if ($result) {
-                                        if (mysqli_num_rows($result) > 0) {
-                                            $no = 1;
-                                            while ($row = mysqli_fetch_assoc($result)) {
-                                                echo "<tr>";
-                                                echo "<td>" . $no++ . "</td>";
-                                                echo "<td>" . $row['idBarang'] . "</td>";
-                                                echo "<td>" . $row['namaBarang'] . "</td>";
-                                                echo "<td>" . $row['deskripsi'] . "</td>";
-                                                echo "<td>" . $row['stok'] . "</td>";
-                                                echo "<td>" . $row['asal'] . "</td>";
-
-                                                echo "<td>" . $row['tahun_penerimaan'] . "</td>";
-                                                $gambarPath = "../../img/" . $row['foto'];
-
-                                                // Tampilkan gambar dengan link ke detail modal
-                                                echo "<td><a href='$gambarPath' data-lightbox='barang' data-title='$row[namaBarang]'><img src='$gambarPath' alt='Gambar Barang' width='100px'></a></td>";
-
-                                                // Tombol Edit dan Delete
-                                                echo "<td><img src='../../img/" . $row['foto'] . "' alt='Gambar Barang'
-                                                width='100px'></td>";
-                                                // Add action buttons with icons
-
-                                                echo "<td>
-                                                <button type='button' class='btn btn-info btn-sm' data-bs-toggle='modal' data-bs-target='#editModal" . $row['idBarang'] . "'>Edit</button>
-                                                <button type='button' class='btn btn-danger btn-sm' data-bs-toggle='modal' data-bs-target='#deleteModal" . $row['idBarang'] . "'>Delete</button>
-                                                </td>";
-
-                                                echo "</tr>";
-                                            }
-                                        } else {
-                                            echo "<tr><td colspan='7'>Tidak ada data</td></tr>";
-                                        }
-                                    } else {
-                                        echo "Error: " . mysqli_error($koneksi);
-                                    }
+                                    $Admin->tabelBarang();
                                     ?>
                                 </tbody>
 
@@ -352,11 +350,11 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                     }
                 </script>
                 <script>
-                    document.addEventListener('DOMContentLoaded', function() {
+                    document.addEventListener('DOMContentLoaded', function () {
                         var popupLinks = document.querySelectorAll('.popup-link');
 
-                        popupLinks.forEach(function(link) {
-                            link.addEventListener('click', function(e) {
+                        popupLinks.forEach(function (link) {
+                            link.addEventListener('click', function (e) {
                                 e.preventDefault();
 
                                 var imageUrl = this.getAttribute('data-image');
@@ -369,10 +367,11 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                 </script>
 
                 <!-- Modal Edit -->
-                <?php $result = mysqli_query($koneksi, "SELECT * FROM barang");
+                <?php
+                $result = $Admin->get_barang();
                 foreach ($result as $rowEdit) {
 
-                ?>
+                    ?>
                     <!-- Edit Modal -->
                     <div class="modal fade" id="editModal<?= $rowEdit['idBarang'] ?>">
                         <div class="modal-dialog">
@@ -384,65 +383,41 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                                 </div>
                                 <!-- Modal Body -->
                                 <div class="modal-body">
-                                    <form action="../../function/update.php" method="post" enctype="multipart/form-data">
+                                    <form action="../../function/update.php?jenis=updateBarang" method="post"
+                                        enctype="multipart/form-data">
                                         <div class="mb-3">
                                             <input type="hidden" name="idBarang" value="<?= $rowEdit['idBarang'] ?>">
                                             <label for="namaBarang" class="form-label">Nama Barang</label>
-
-                                            <input type="text" name="namaBarang" id="namabarang" class="form-control" required value="<?= $rowEdit['namaBarang'] ?>">
+                                            <input type="text" name="namaBarang" id="namabarang" class="form-control"
+                                                required value="<?= $rowEdit['namaBarang'] ?>">
                                         </div>
                                         <div class="mb-3">
                                             <input type="hidden" name="idBarang" value="<?= $rowEdit['idBarang'] ?>">
-                                            <label for="kdBarang" class="form-label">Kode Barang</label>
-                                            <input type="text" name="kdBarang" id="kdbarang" class="form-control" required value="<?= $rowEdit['kdBarang'] ?>">
+                                            <label for="kd_Barang" class="form-label">Kode Barang</label>
+                                            <input type="text" name="kd_Barang" id="kd_barang" class="form-control" required
+                                                value="<?= $rowEdit['kd_Barang'] ?>">
                                         </div>
                                         <div class="mb-3">
                                             <label for="deskripsi" class="form-label">Deskripsi Barang</label>
-                                            <input type="text" name="deskripsi" id="deskripsi" class="form-control" required value="<?= $rowEdit['deskripsi'] ?>">
+                                            <select name="deskripsi" id="deskripsi" class="form-control" required>
+                                                <option value="bagus">Bagus</option>
+                                                <option value="rusak">Rusak</option>
+                                            </select>
                                         </div>
                                         <div class="mb-3">
                                             <label for="stok" class="form-label">Stok Barang</label>
-                                            <input type="number" name="stok" id="stok" class="form-control" required value="<?= $rowEdit['stok'] ?>">
+                                            <input type="number" name="stok" id="stok" class="form-control" required
+                                                value="<?= $rowEdit['stok'] ?>">
                                         </div>
                                         <div class="mb-3">
                                             <label for="asal" class="form-label">Asal Barang</label>
                                             <select name="asal" id="asalEdit" class="form-control">
                                                 <?php
-                                                $result_anggaran = mysqli_query($koneksi, "SELECT * FROM anggaran");
-                                                while ($row_anggaran = mysqli_fetch_assoc($result_anggaran)) {
-                                                    echo "<option value='" . $row_anggaran['asal'] . "' data-tahun='" . $row_anggaran['tahun_penerimaan'] . "'>" . $row_anggaran['asal'] . "</option>";
-=======
-                                            <input type="text" name="namaBarang" id="namabarang" class="form-control" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="deskripsi" class="form-label">Deskripsi Barang</label>
-                                            <input type="text" name="deskripsi" id="deskripsi" class="form-control" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="stok" class="form-label">Stok Barang</label>
-                                            <input type="number" name="stok" id="stok" class="form-control" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="keterangan" class="form-label">Asal Barang</label>
-                                            <select name="asal" id="asal" class="form-control">
-                                                <?php
-                                                $result_anggaran = mysqli_query($koneksi, "SELECT * FROM anggaran");
-                                                while ($row_anggaran = mysqli_fetch_assoc($result_anggaran)) {
-                                                    echo "<option value='" . $row_anggaran['asal'] . "'>" . $row_anggaran['asal'] . "</option>";
-
-                                                }
+                                                $Admin->asalBarang();
                                                 ?>
                                             </select>
                                         </div>
                                         <div class="mb-3">
-
-                                            <label for="tahun_penerimaan" class="form-label">Tahun Penerimaan</label>
-                                            <input type="date" name="tahun_penerimaan" id="tahun_penerimaan" class="form-control" required>
-                                        </div>
-
-
-                                        <div class="mb-3">
-
                                             <label for="foto" class="form-label">Foto Barang</label><br>
                                             <input type="file" name="foto" id="foto" class="" required>
                                         </div>
@@ -466,27 +441,28 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                                 <div class="modal-body">
                                     <p>Are you sure you want to delete this barang?</p>
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                    <a href="../../function/delete.php?id=<?= $rowEdit['idBarang'] ?>&type=barang" class="btn btn-danger">delete</a>
+                                    <a href="../../function/delete.php?id=<?= $rowEdit['idBarang'] ?>&type=barang"
+                                        class="btn btn-danger">delete</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 <?php } ?>
 
-                <script>
-                    document.getElementById('asal').addEventListener('input', function() {
+                <!-- <script>
+                    document.getElementById('asal').addEventListener('input', function () {
                         var selectedOption = this.options[this.selectedIndex];
                         var tahunPenerimaan = selectedOption.getAttribute('data-tahun');
                         document.getElementById('tahun_penerimaan').value = tahunPenerimaan;
                     });
                 </script>
                 <script>
-                    document.getElementById('asalEdit').addEventListener('input', function() {
+                    document.getElementById('asalEdit').addEventListener('input', function () {
                         var selectedOption = this.options[this.selectedIndex];
                         var tahunPenerimaan = selectedOption.getAttribute('data-tahun');
                         document.getElementById('tahun_penerimaan').value = tahunPenerimaan;
                     });
-                </script>
+                </script> -->
 
                 <!-- Begin Page Content -->
             </div>
@@ -503,7 +479,8 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     </a>
 
     <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">

@@ -1,130 +1,67 @@
 <?php
-session_start(); // Memulai sesi
-// var_dump($_POST);
+session_start();
+include '../OOP/admin.php';
+$Admin = new Admin();
+
 
 if (!empty($_SESSION['username'])) {
 
-    require '../config/koneksi.php';
-    require '../function/pesan_kilat.php';
-    require '../function/anti_injection.php';
-    if (isset($_POST['editbarang'])) {
+    require 'pesan_kilat.php';
+    require 'anti_injection.php';
 
+    if (isset($_GET['jenis']) && $_GET['jenis'] == 'updateBarang') {
 
-    if (isset($_POST['editbarang'])) { // Change to 'editbarang'
-        // Assuming the 'editNama' field exists in your form
-        $gambar_barang = $_FILES['foto']['name'];
-        $targetDirImg = $_SERVER['DOCUMENT_ROOT'] . '/dasarweb/inventory_JTI/SyntaxGacor123_inventory_TI-2C/img/';
-        $tmpFile = $_FILES['foto']['tmp_name'];
-        move_uploaded_file($tmpFile, $targetDirImg . $gambar_barang);
+        $data = $_POST;
+        $addtotable_barang = $Admin->updateBarang($data);
 
-        $idBarang = mysqli_real_escape_string($koneksi, $_POST['idBarang']);
-        $namaBarang = mysqli_real_escape_string($koneksi, $_POST['namaBarang']);
-        $deskripsiBarang = mysqli_real_escape_string($koneksi, $_POST['deskripsi']);
-        $stokBarang = mysqli_real_escape_string($koneksi, $_POST['stok']);
-        $asalBarang = mysqli_real_escape_string($koneksi, $_POST['asal']);
-
-        $tahun_penerimaan = mysqli_real_escape_string($koneksi, $_POST['tahun_penerimaan']);
-
-        // File Upload
-        $gambar_barang = $_FILES['foto']['name'];
-        $tmpFile = $_FILES['foto']['tmp_name'];
-        $targetDirImg = "../../img/";
-
-        // Periksa apakah direktori target ada dan buat jika belum ada
-        if (!file_exists($targetDirImg)) {
-
-            mkdir($targetDirImg, 0755, true);
-        }
-
-        move_uploaded_file($tmpFile, $targetDirImg . $gambar_barang);
-
-        // Query Update
-        $query = "UPDATE barang SET namaBarang = '$namaBarang', deskripsi = '$deskripsiBarang', stok = '$stokBarang', asal = '$asalBarang', tahun_penerimaan = '$tahun_penerimaan', foto = '$gambar_barang' WHERE idBarang = $idBarang";
-
-        $update_barang = mysqli_query($koneksi, $query);
-
-        $foto = mysqli_real_escape_string($koneksi, $gambar_barang);
-
-        // Query to update barang
-        $update_barang = mysqli_query($koneksi, "UPDATE barang SET namaBarang = '$namaBarang', stok = '$stokBarang', deskripsi = '$deskripsiBarang' , asal = '$asalBarang' , foto ='$foto'  WHERE idBarang = $idBarang");
-
-        if ($update_barang) {
-
-            echo "Data barang berhasil diupdate.";
-            header('Location: ../admin/module/barang.php');
+        if ($addtotable_barang) {
+            $Admin->pesan('success', "Data Barang Baru Diupdate.");
+            header("Location: ../admin/module/barang.php");
         } else {
-            echo "Gagal update data barang: " . mysqli_error($koneksi);
+            $Admin->pesan('failed', "Data Barang Baru Tidak Berhasil Diupdate.");
         }
-    } else if (isset($_POST['editanggaran'])) {
+    } else if (isset($_GET['jenis']) && $_GET['jenis'] == 'updateAnggaran') {
 
-        $idAnggaran = mysqli_real_escape_string($koneksi, $_POST['idAnggaran']);
-        $asalAnggaran = mysqli_real_escape_string($koneksi, $_POST['asal']);
-        $tahun_penerimaan = mysqli_real_escape_string($koneksi, $_POST['tahun_penerimaan']);
+        $data = $_POST;
+        $addtotable_anggaran = $Admin->updateAnggaran($data);
 
-        $update_anggaran = mysqli_query($koneksi, "UPDATE anggaran SET asal = '$asalAnggaran', tahun_penerimaan = '$tahun_penerimaan' WHERE idAnggaran = $idAnggaran");
-
-        if ($update_anggaran) {
-            echo 'f';
-            echo "Data anggaran berhasil diupdate.";
-            header('Location: ../admin/module/anggaran.php'); // Change the location accordingly
+        if ($addtotable_anggaran) {
+            $Admin->pesan('success', "Data Anggaran Baru Diupdate.");
+            header("Location: ../admin/module/anggaran.php");
         } else {
-            echo "Gagal update data anggaran: " . mysqli_error($koneksi);
+            $Admin->pesan('failed', "Data Anggaran Baru Tidak Berhasil Diupdate.");
         }
-    } else if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        exit();
+    } else if (isset($_GET['jenis']) && $_GET['jenis'] == 'updateUser') {
 
-        if (isset($_POST['editUser'])) {
-            echo 'h';
-            $id = $_POST['id'];
-            $nama_lengkap = $_POST['nama_lengkap'];
-            $email = $_POST['email'];
-            $username = $_POST['username'];
-            $alamat = $_POST['alamat'];
-            $status = $_POST['status'];
+        $data = $_POST;
+        $addtotable_user = $Admin->updateUser($data);
 
-            // Perform the update query
-            $query = "UPDATE user SET 
-                nama_lengkap = '$nama_lengkap', 
-                email = '$email', 
-                username = '$username', 
-                alamat = '$alamat', 
-                status = '$status' 
-                WHERE id = $id";
-
-            $result = mysqli_query($koneksi, $query);
-
-            if ($result) {
-                echo 'i';
-                // Redirect to the page where you display the users
-                header("Location: ../admin/module/list_user/list.php");
-                exit();
-            } else {
-                echo "Error updating user: " . mysqli_error($koneksi);
-            }
-        } else if (isset($_POST['editProfile'])) {
-            // echo 'k';
-            // var_dump($_POST);
-            // die();
-            $id = $_POST['id'];
-            $email = $_POST['email'];
-            $alamat = $_POST['alamat'];
-            $password = md5($_POST['password']);
-
-            // Perform the update query
-            $query = "UPDATE user SET email = '$email', alamat = '$alamat', password = '$password' WHERE id = $id";
-
-            $result = mysqli_query($koneksi, $query);
-
-            if ($result) {
-                echo 'l';
-                // Redirect to the page where you display the users
-                header("Location: ../admin/module/profile/editProfile.php");
-                exit();
-            } else {
-                echo "Error updating user: " . mysqli_error($koneksi);
-            }
+        if ($addtotable_user) {
+            $Admin->pesan('success', "Data User Berhasil Diupdate.");
+            header("Location: ../admin/module/list_user/list.php");
+        } else {
+            $Admin->pesan('failed', "Data User Tidak Berhasil Diupdate.");
         }
+        exit();
+    } else if (isset($_GET['jenis']) && $_GET['jenis'] == 'updateProfile') {
+
+        $data = $_POST;
+        $addtotable_profile = $Admin->updateProfile($data);
+
+        if ($addtotable_profile) {
+            // $Admin->pesan('success', "Profile Berhasil Diupdate.");
+            $_SESSION['alert'] = array('type' => 'success', 'message' => 'Profile Berhasil Diupdate.');
+            // untuk admin
+            header("Location: ../user/profile/profile.php");
+            // untuk user
+            header("Location: ../user/data/profile/profile.php");
+        } else {
+            // $Admin->pesan('failed', "Profile Tidak Berhasil Diupdate.");
+            $_SESSION['alert'] = array('type' => 'failed', 'message' => 'Profile Tidak Berhasil Diupdate.');
+        }
+        exit();
     }
 } else {
     echo "Anda tidak masuk.";
-    // Mungkin ingin mengarahkan pengguna ke halaman login atau mengambil tindakan yang sesuai
 }

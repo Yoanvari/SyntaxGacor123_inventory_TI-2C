@@ -1,21 +1,33 @@
 <?php
 session_start();
+require_once '../../../OOP/CRUD.php';
 include '../../../config/koneksi.php';
+include '../../../OOP/user.php';
+include '../../../OOP/Pengguna.php';
+$koneksi = new DatabaseConnection();
+$user = new User($koneksi);
+$pengguna = new Pengguna($koneksi);
 // untuk admin
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     // Jika tidak, redirect ke login.php
     header('Location: ../login.php');
     exit();
 }
+$userId = $_SESSION['id']; // Ambil userId dari sesi
+$jenisKelamin = $pengguna->get_user($userId);
 
+if (isset($_SESSION['jenis_kelamin'])) {
+    $avatarFile = $pengguna->getAvatarByGender($_SESSION['jenis_kelamin']);
+} else {
+    // Handle jika 'jenis_kelamin' tidak ada dalam sesi
+    $avatarFile = 'default_avatar.png'; // Atur avatar default
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
-
-
     <title>profile with data and skills - Bootdey.com</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -86,11 +98,10 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 <body>
     <div class="container">
         <div class="main-body">
-
             <nav aria-label="breadcrumb" class="main-breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="../../index.php">Home</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">User Profile</li>
+                    <li class="breadcrumb-item active" aria-current="page">User</li>
                 </ol>
             </nav>
 
@@ -99,9 +110,21 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex flex-column align-items-center text-center">
-
-                                <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin"
-                                    class="rounded-circle" width="150">
+                                <?php
+                                if ($jenisKelamin) {
+                                    if ($jenisKelamin === 'laki-laki') {
+                                        echo '<img src="https://cdn.icon-icons.com/icons2/3708/PNG/512/man_person_people_avatar_icon_230017.png" width="200" height="200">';
+                                    } elseif ($jenisKelamin === 'perempuan') {
+                                        echo '<img src="http://localhost/xampp/lkqodnwnefiwneufoin/inventaris/inventaris/img/woman3.png" width="200" height="200">';
+                                    } else {
+                                        // Handle jika jenis kelamin tidak dikenali
+                                        echo "Avatar tidak tersedia.";
+                                    }
+                                } else {
+                                    // Handle jika data pengguna tidak ditemukan
+                                    echo "Data pengguna tidak ditemukan.";
+                                }
+                                ?>
                                 <div class="mt-3">
                                     <h4>
                                         <?php echo isset($_SESSION['nama_lengkap']) ? $_SESSION['nama_lengkap'] : 'Nama Pengguna'; ?>
@@ -111,6 +134,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                                     </p>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -144,14 +168,6 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                                 </div>
                             </div>
                             <hr>
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <h6 class="mb-0">Password</h6>
-                                </div>
-                                <div class="col-sm-9 text-secondary">
-                                    <?php echo isset($_SESSION['password']) ? $_SESSION['password'] : 'password'; ?>
-                                </div>
-                            </div>
                             <hr>
                             <div class="row">
                                 <div class="col-sm-3">
@@ -162,7 +178,6 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                                 </div>
                             </div>
                             <hr>
-                            <!-- Tambahkan tombol "Edit" untuk menuju halaman edit -->
                             <div class="row">
                                 <div class="col-sm-12">
                                     <a href="editProfile.php" class="btn btn-info">Edit</a>

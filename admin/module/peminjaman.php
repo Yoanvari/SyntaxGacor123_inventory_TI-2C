@@ -1,12 +1,13 @@
 <?php
 session_start();
-include '../../config/koneksi.php';
-// untuk admin
+include '../../OOP/Admin.php';
+$Admin = new Admin();
+
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
-    // Jika tidak, redirect ke login.php
     header('Location: ../login.php');
     exit();
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -191,75 +192,118 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 
                 </nav>
                 <!-- End of Topbar -->
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="card shadow-sm">
-                                <div class="card-header">
-                                    <div class="d-flex align-items-center">
-                                        <h5 class="card-title">Data Pinjaman Barang</h5>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <table id="add-row" class="table table-striped table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">No</th>
-                                                <th scope="col">Nama Barang</th>
-                                                <th scope="col">Tgl Mulai</th>
-                                                <th scope="col">Tgl Selesai</th>
-                                                <th scope="col">Jumlah Pinjam</th>
-                                                <th scope="col">Lokasi Barang</th>
-                                                <th scope="col">Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php
-                                            $no = 1;
-                                            $query = mysqli_query($koneksi, 'SELECT pinjambarang.id, pinjambarang.id_barang, pinjambarang.id_user, pinjambarang.tgl_mulai, pinjambarang.tgl_selesai, pinjambarang.qty, pinjambarang.lokasi_barang, pinjambarang.status, barang.namaBarang from pinjambarang inner join barang on barang.idBarang=pinjambarang.id_barang inner join user on user.id=pinjambarang.id_user');
-                                            while ($pinjambarang = mysqli_fetch_array($query)) {
-                                                ?>
-                                                <tr>
-                                                    <td>
-                                                        <?php echo $no++ ?>
-                                                    </td>
-                                                    <td>
-                                                        <?php echo $pinjambarang['namaBarang'] ?>
-                                                    </td>
-                                                    <td>
-                                                        <?php echo $pinjambarang['tgl_mulai'] ?>
-                                                    </td>
-                                                    <td>
-                                                        <?php echo $pinjambarang['tgl_selesai'] ?>
-                                                    </td>
-                                                    <td>
-                                                        <?php echo $pinjambarang['qty'] ?>
-                                                    </td>
-                                                    <td>
-                                                        <?php echo $pinjambarang['lokasi_barang'] ?>
-                                                    </td>
-                                                    <td>
-                                                        <?php if ($pinjambarang['status'] == 'menunggu') { ?>
-                                                            <div class="badge badge-danger">
-                                                                <?php echo $pinjambarang['status'] ?>
-                                                            </div>
-                                                        <?php } else { ?>
-                                                            <div class="badge rounded-pill badge-success">
-                                                                <?php echo $pinjambarang['status'] ?>
-                                                            </div>
-                                                        <?php } ?>
-                                                    </td>
-                                                </tr>
-                                            <?php } ?>
-                                        </tbody>
-
-                                    </table>
-                                </div>
+                <div class="card-1 shadow mb-4">
+                    <div class="card-1-body">
+                        <div class="card-1-body d-flex align-items-center justify-content-between">
+                            <div class="mb-3">
+                                <input type="text" id="search" class="form-control" onkeyup="searchTable()"
+                                    placeholder="Cari..." style="max-width: 200px;">
                             </div>
                         </div>
-                    </div>
-                </div>
 
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped table-hover " id="dataTable" width="100%"
+                                cellspacing="0">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">No</th>
+                                        <th scope="col">Id Barang</th>
+                                        <th scope="col">Kode Barang</th>
+                                        <th scope="col">Nama Barang</th>
+                                        <th scope="col">Tgl Mulai</th>
+                                        <th scope="col">Tgl Selesai</th>
+                                        <th scope="col">Jumlah Pinjam</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $pinjamBarangData = $Admin->fetchPinjamBarang();
+                                    $no = 1;
+                                    foreach ($pinjamBarangData as $row) {
+                                        ?>
+                                        <tr>
+                                            <td>
+                                                <?= $no++ ?>
+                                            </td>
+                                            <td>
+                                                <?= $row->id_barang ?>
+                                            </td>
+                                            <td>
+                                                <?= $row->kd_barang ?>
+                                            </td>
+                                            <td>
+                                                <?= $row->namaBarang ?>
+                                            </td>
+                                            <td>
+                                                <?= $row->tgl_mulai ?>
+                                            </td>
+                                            <td>
+                                                <?= $row->tgl_selesai ?>
+                                            </td>
+                                            <td>
+                                                <?= $row->qty ?>
+                                            </td>
+                                            <td>
+                                                <?php if ($row->status == 'waiting') { ?>
+                                                    <div class="badge badge-danger" style="font-size: 1.2rem;">
+                                                        <?= $row->status ?>
+                                                    </div>
+                                                <?php } else { ?>
+                                                    <div class="badge badge-success" style="font-size: 1.2rem;">
+                                                        <?= $row->status ?>
+                                                    </div>
+                                                <?php } ?>
+                                            </td>
+                                            <td>
+                                                <?php if ($row->status == 'waiting') { ?>
+                                                    <a href="#approve<?= $row->id ?>" data-toggle="modal" title="Batal Pinjam" class="btn btn-xs btn-primary">
+                                                        <i class="fa fa-check-circle"></i>
+                                                    </a>
+                                                    <a href="#reject<?= $row->id ?>" data-toggle="modal" title="Batal Pinjam"class="btn btn-xs btn-danger">
+                                                        <i class="fa fa-times-circle"></i>
+                                                    </a>
+                                                <?php } else { ?>
+                                                    <div class="badge badge-secondary" style="font-size: 1.2rem;">
+                                                        No Action
+                                                    </div>
+                                                <?php } ?>
+                                            </td>
+                                        </tr>
+                                    <?php } ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <script>
+                        function searchTable() {
+                            const searchText = document.getElementById('search').value.toLowerCase();
+                            const table = document.getElementById('dataTable');
+                            const rows = table.getElementsByTagName('tr');
+
+                            for (let i = 0; i < rows.length; i++) {
+                                const cells = rows[i].getElementsByTagName('td');
+                                let found = false;
+
+                                for (let j = 0; j < cells.length; j++) {
+                                    const cellText = cells[j].innerText.toLowerCase();
+
+                                    if (cellText.includes(searchText)) {
+                                        found = true;
+                                        break;
+                                    }
+                                }
+
+                                if (found) {
+                                    rows[i].style.display = '';
+                                } else {
+                                    rows[i].style.display = 'none';
+                                }
+                            }
+                        }
+                    </script>
+                </div>
                 <!-- Begin Page Content -->
             </div>
             <!-- End of Main Content -->
@@ -268,6 +312,11 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 
     </div>
     <!-- End of Page Wrapper -->
+
+    <!--Modal Peminjaman-->
+    <?php
+    $Admin->displayPinjamBarangModals();
+    ?>
 
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
@@ -293,6 +342,26 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
             </div>
         </div>
     </div>
+    <!-- Modal Notifikasi -->
+    <div class="modal fade" id="notifModal" tabindex="-1" role="dialog" aria-labelledby="notifModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="notifModalLabel">Notifikasi</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Konten notifikasi akan ditampilkan di sini -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Bootstrap core JavaScript-->
     <script src="../../vendor/jquery/jquery.min.js"></script>
@@ -306,7 +375,64 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     <!-- Page level custom scripts -->
     <script src="../../js/demo/chart-area-demo.js"></script>
     <script src="../../js/demo/chart-pie-demo.js"></script>
+    <script>
+        function approve($id) {
+            $.ajax({
+                type: "POST",
+                url: "../../user/proses-cart.php",
+                data: { "proses": "approve", "id": $id },
+                dataType: "JSON",
+                success: function (response) {
+                    console.log(response);
+                    if (response.message === "success") {
+                        showNotificationModal("Persetujuan Berhasil", "Pinjaman telah disetujui.");
+                        
+                       // Menangkap event tombol tutup modal
+                        $('#notifModal').on('hidden.bs.modal', function () {
+                            // Setelah modal ditutup, lakukan location.reload()
+                            location.reload();
+                        });
 
+                        // Menutup modal setelah menangkap event
+                        $('#notifModal').modal('hide');
+                    }
+                }
+            });
+        }
+
+        function reject($id) {
+            $.ajax({
+                type: "POST",
+                url: "../../user/proses-cart.php",
+                data: { "proses": "reject", "id": $id },
+                dataType: "JSON",
+                success: function (response) {
+                    console.log(response);
+                    if (response.message === "success") {
+                        showNotificationModal("Penolakan Berhasil", "Pinjaman telah ditolak.");
+
+                        // Menangkap event tombol tutup modal
+                        $('#notifModal').on('hidden.bs.modal', function () {
+                            // Setelah modal ditutup, lakukan location.reload()
+                            location.reload();
+                        });
+
+                        // Menutup modal setelah menangkap event
+                        $('#notifModal').modal('hide');
+                    }
+                }
+            });
+        }
+
+        function showNotificationModal(title, message) {
+            // Mengganti konten modal dengan pesan notifikasi
+            $("#notifModalLabel").text(title);
+            $(".modal-body").html("<p>" + message + "</p>");
+
+            // Menampilkan modal
+            $("#notifModal").modal("show");
+        }
+    </script>
 </body>
 
 </html>

@@ -1,5 +1,5 @@
 <?php
-include 'config/koneksi.php';
+
 function antiinjection($koneksi, $data)
 {
     $koneksi = new DatabaseConnection();

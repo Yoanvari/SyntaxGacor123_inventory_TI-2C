@@ -1,6 +1,9 @@
 <?php
 session_start();
 include '../config/koneksi.php';
+$koneksi = new DatabaseConnection();
+// include '../OOP/barang.php';
+// $barang = new barang();
 // untuk admin
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     // Jika tidak, redirect ke login.php
@@ -22,7 +25,9 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 
     <!-- Custom fonts for this template-->
     <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
     <!-- Custom styles for this template-->
     <link href="../css/sb-admin-2.css" rel="stylesheet">
     <!-- Sertakan Chart.js -->
@@ -33,6 +38,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 </head>
 
 <body id="page-top">
+
 
     <!-- Page Wrapper -->
     <div id="wrapper">
@@ -65,7 +71,8 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item" id="dataMasterItem">
-                <a class="nav-link collapsed" href="datamaster.php" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                <a class="nav-link collapsed" href="datamaster.php" data-toggle="collapse" data-target="#collapseTwo"
+                    aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Data Master</span>
                 </a>
@@ -142,14 +149,18 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 
                         <!-- Nav Item - Search Dropdown (Visible Only XS) -->
                         <li class="nav-item dropdown no-arrow d-sm-none">
-                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-search fa-fw"></i>
                             </a>
                             <!-- Dropdown - Messages -->
-                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in" aria-labelledby="searchDropdown">
+                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+                                aria-labelledby="searchDropdown">
                                 <form class="form-inline mr-auto w-100 navbar-search">
                                     <div class="input-group">
-                                        <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+                                        <input type="text" class="form-control bg-light border-0 small"
+                                            placeholder="Search for..." aria-label="Search"
+                                            aria-describedby="basic-addon2">
                                         <div class="input-group-append">
                                             <button class="btn btn-primary" type="button">
                                                 <i class="fas fa-search fa-sm"></i>
@@ -162,15 +173,18 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">
                                     <?php echo isset($_SESSION['nama_lengkap']) ? $_SESSION['nama_lengkap'] : 'Nama Pengguna'; ?>
                                 </span>
-                                <img class="img-profile rounded-circle" src="../img/undraw_profile.svg">
+                                <img class="img-profile rounded-circle"
+                                    src="https://www.pngplay.com/wp-content/uploads/12/User-Avatar-Profile-Transparent-Free-PNG-Clip-Art.png">
                             </a>
 
                             <!-- Dropdown - User Information -->
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="userDropdown">
                                 <a class="dropdown-item" href="./module/profile/profile.php">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
@@ -180,7 +194,8 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                                     Activity Log
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="../logout.php" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" href="../logout.php" data-toggle="modal"
+                                    data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>
@@ -247,7 +262,8 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                                     <div class="card-body text-center">
                                         <div class="row no-gutters align-items-center">
                                             <div class="col">
-                                                <div class="text-xs font-weight-bold text-peminjaman text-uppercase mb-1">
+                                                <div
+                                                    class="text-xs font-weight-bold text-peminjaman text-uppercase mb-1">
                                                     Data Peminjaman</div>
                                                 <div class="h5 mb-0 font-weight-bold text-gray-800">
                                                     <i class="fas fa-handshake fa-lg text-peminjaman"></i>
@@ -312,7 +328,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                             <canvas id="barChartCanvas"></canvas>
                             <?php
                             // Fetch data for the bar chart
-                            $barChartResult = mysqli_query($koneksi, "SELECT asal, COUNT(*) as total FROM barang GROUP BY asal");
+                            $barChartResult = mysqli_query($koneksi->getConnection(), "SELECT asal, COUNT(*) as total FROM barang GROUP BY asal");
                             $barChartLabels = [];
                             $barChartValues = [];
 
@@ -358,11 +374,18 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                                             legend: {
                                                 display: false
                                             }
+                                        },
+                                        // Menghilangkan label sumbu x (x-axis labels)
+                                        scales: {
+                                            x: {
+                                                display: false // Menghilangkan label sumbu x
+                                            }
                                         }
                                     }
                                 });
                             </script>
                         </div>
+
 
                         <!-- Pie Chart -->
                         <div id="pieChartContainer">
@@ -374,7 +397,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                                 'inactive' => 0,
                             ];
 
-                            $query = mysqli_query($koneksi, 'SELECT status, COUNT(*) as total FROM user GROUP BY status');
+                            $query = mysqli_query($koneksi->getConnection(), 'SELECT status, COUNT(*) as total FROM user GROUP BY status');
                             while ($row = mysqli_fetch_assoc($query)) {
                                 $statusCounts[$row['status']] = $row['total'];
                             }
@@ -428,7 +451,8 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     </a>
 
     <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -453,7 +477,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 
         // Tambahkan event listener klik pada setiap elemen nav-item
         for (let i = 0; i < navItems.length; i++) {
-            navItems[i].addEventListener("click", function() {
+            navItems[i].addEventListener("click", function () {
                 // Hapus kelas "active" dari semua elemen nav-item
                 for (let j = 0; j < navItems.length; j++) {
                     navItems[j].classList.remove("active");

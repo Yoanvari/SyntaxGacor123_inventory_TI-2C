@@ -1,6 +1,7 @@
 <?php
-include '../../config/koneksi.php';
-
+include '../../OOP/Admin.php';
+$Admin = new Admin();
+// $koneksi = new DatabaseConnection();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -121,7 +122,7 @@ include '../../config/koneksi.php';
                     </button>
 
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Data Peminjaman</h1>
+                        <h1 class="h3 mb-0 text-gray-800">History Pinjaman</h1>
                     </div>
 
                     <!-- Topbar Navbar -->
@@ -187,74 +188,63 @@ include '../../config/koneksi.php';
                     </ul>
 
                 </nav>
-
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="card shadow-sm">
-                                <div class="card-header">
-                                    <div class="d-flex align-items-center">
-                                        <h5 class="card-title">Data Pinjaman Barang</h5>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <table id="add-row" class="table table-striped table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">No</th>
-                                                <th scope="col">Nama Barang</th>
-                                                <th scope="col">Tgl Mulai</th>
-                                                <th scope="col">Tgl Selesai</th>
-                                                <th scope="col">Jumlah Pinjam</th>
-                                                <th scope="col">Lokasi Barang</th>
-                                                <th scope="col">Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php
-                                            $no = 1;
-                                            // Kueri dengan kondisi WHERE untuk menampilkan hanya yang sudah selesai
-                                            $query = mysqli_query($koneksi, 'SELECT pinjambarang.id, pinjambarang.id_barang, pinjambarang.id_user, pinjambarang.tgl_mulai, pinjambarang.tgl_selesai, pinjambarang.qty, pinjambarang.lokasi_barang, pinjambarang.status, barang.namaBarang FROM pinjambarang INNER JOIN barang ON barang.idBarang=pinjambarang.id_barang INNER JOIN user ON user.id=pinjambarang.id_user WHERE pinjambarang.tgl_selesai < NOW()');
-                                            while ($pinjambarang = mysqli_fetch_array($query)) {
-                                                ?>
-                                                <tr>
-                                                    <td>
-                                                        <?php echo $no++ ?>
-                                                    </td>
-                                                    <td>
-                                                        <?php echo $pinjambarang['namaBarang'] ?>
-                                                    </td>
-                                                    <td>
-                                                        <?php echo $pinjambarang['tgl_mulai'] ?>
-                                                    </td>
-                                                    <td>
-                                                        <?php echo $pinjambarang['tgl_selesai'] ?>
-                                                    </td>
-                                                    <td>
-                                                        <?php echo $pinjambarang['qty'] ?>
-                                                    </td>
-                                                    <td>
-                                                        <?php echo $pinjambarang['lokasi_barang'] ?>
-                                                    </td>
-                                                    <td>
-                                                        <?php if ($pinjambarang['status'] == 'menunggu') { ?>
-                                                            <div class="badge badge-danger">
-                                                                <?php echo $pinjambarang['status'] ?>
-                                                            </div>
-                                                        <?php } else { ?>
-                                                            <div class="badge rounded-pill badge-success">
-                                                                <?php echo $pinjambarang['status'] ?>
-                                                            </div>
-                                                        <?php } ?>
-                                                    </td>
-                                                </tr>
-                                            <?php } ?>
-                                        </tbody>
-                                    </table>
-                                </div>
+                <div class="card-1 shadow mb-4">
+                    <div class="card-1-body">
+                        <div class="card-1-body d-flex align-items-center justify-content-between">
+                            <div class="mb-3">
+                                <input type="text" id="search" class="form-control" onkeyup="searchTable()"
+                                    placeholder="Cari..." style="max-width: 200px;">
                             </div>
                         </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped table-hover " id="dataTable" width="100%"
+                                cellspacing="0">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">No</th>
+                                        <th scope="col">Nama Barang</th>
+                                        <th scope="col">Tgl Mulai</th>
+                                        <th scope="col">Tgl Selesai</th>
+                                        <th scope="col">Jumlah Pinjam</th>
+                                        <th scope="col">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $Admin->displayCompletedPinjamBarangTable();
+                                    ?>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
+                    <script>
+                        function searchTable() {
+                            const searchText = document.getElementById('search').value.toLowerCase();
+                            const table = document.getElementById('dataTable');
+                            const rows = table.getElementsByTagName('tr');
+
+                            for (let i = 0; i < rows.length; i++) {
+                                const cells = rows[i].getElementsByTagName('td');
+                                let found = false;
+
+                                for (let j = 0; j < cells.length; j++) {
+                                    const cellText = cells[j].innerText.toLowerCase();
+
+                                    if (cellText.includes(searchText)) {
+                                        found = true;
+                                        break;
+                                    }
+                                }
+
+                                if (found) {
+                                    rows[i].style.display = '';
+                                } else {
+                                    rows[i].style.display = 'none';
+                                }
+                            }
+                        }
+                    </script>
                 </div>
                 <!-- Begin Page Content -->
             </div>
